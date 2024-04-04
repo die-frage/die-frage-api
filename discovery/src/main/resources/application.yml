@@ -1,0 +1,16 @@
+eureka:
+  instance:
+    hostname: localhost
+
+# we don' t need register eureka itself
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+server:
+  port: 8080
+
+spring:
+  config:
+    import: optional:configserver:http://localhost:8888
