@@ -24,7 +24,9 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     @Override
     public GatewayFilter apply(Config config) {
         return (((exchange, chain) -> {
+
             System.out.println(exchange.getRequest().getPath());
+
             if (validator.isSecured.test(exchange.getRequest())){
                 // header contains or not token
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)){
@@ -37,11 +39,9 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                     authHeader =  authHeader.substring(7);
                 }
 
-                // Rest call
-                System.out.println(authHeader);
                 restTemplate.getForObject("http://localhost:8010/auth/validate?token=" + authHeader, Boolean.class);
-
             }
+
             return chain.filter(exchange);
         }));
     }
