@@ -1,0 +1,450 @@
+openapi: 3.0.3
+info:
+  title: Open API die Frage
+  description: survey's requests
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8787'
+  - url: 'http://localhost:8030'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        firsName:
+          type: string
+        lastName:
+          type: string
+        patronymic:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    StatusDTO:
+      type: object
+      properties:
+        status_id:
+          type: integer
+        status_name:
+          type: string
+    QuestionDTO:
+      type: object
+      properties:
+        question_id:
+          type: integer
+        question:
+          type: string
+        type_question:
+          type: string
+        incorrect_answers:
+          type: array
+          items:
+            type: string
+        correct_answers:
+          type: array
+          items:
+            type: string
+        points:
+          type: integer
+        time_limit_sec:
+          type: integer
+    Questions:
+      type: array
+      items:
+        $ref: "#/components/schemas/QuestionDTO"
+    SurveyDTO:
+      type: object
+      properties:
+        survey_id:
+          type: integer
+        title:
+          type: string
+        date_begin:
+          type: string
+        date_end:
+          type: string
+        max_students:
+          type: integer
+        anonymous:
+          type: boolean
+        code:
+          type: string
+        link:
+          type: string
+        qrCode:
+          type: string
+        user:
+          $ref: "#/components/schemas/UserDTO"
+        status:
+          $ref: "#/components/schemas/StatusDTO"
+        questions:
+          $ref: "#/components/schemas/Questions"
+    SurveyRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        max_students:
+          type: integer
+        anonymous:
+          type: boolean
+        questions:
+          $ref: "#/components/schemas/Questions"
+        date_begin:
+          type: string
+        date_end:
+          type: string
+
+paths:
+  /api/survey/{professor_id}/all:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: get all professor's surveys
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /api/survey/{professor_id}/by_name:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: get all professor's surveys by name
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: survey_name
+          required: true
+          schema:
+            type: string
+          description: survey name search
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /api/survey/{professor_id}/add:
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: survey creation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurveyRequest'
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message: Survey not found
+        '500':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INTERNAL_EXCEPTION:
+                  summary: Unlnown Exception
+                  value:
+                    code: INVALID_DATE_BEGIN_FORMAT
+                    status: 500
+                    message: Unlnown Exception
+  /api/survey/{professor_id}/{survey_id}/update:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: survey creation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurveyRequest'
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: survey_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message: Survey not found
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_DATE_BEGIN_FORMAT:
+                  summary: Invalid date begin format
+                  value:
+                    code: INVALID_DATE_BEGIN_FORMAT
+                    status: 400
+                    message: Invalid date begin format
+                INVALID_DATE_END_FORMAT:
+                  summary: Invalid date end format
+                  value:
+                    code: INVALID_DATE_END_FORMAT
+                    status: 400
+                    message: Invalid date end format
+        '500':
+          description: '{"code":"INTERNAL_EXCEPTION","status":500,"message":"USER_NOT_FOUND"}'
+  /api/survey/{professor_id}/{survey_id}/start:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: start survey
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: survey_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message:
+                      Survey not found
+        '500':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INTERNAL_EXCEPTION:
+                  summary: Unlnown Exception
+                  value:
+                    code: INVALID_DATE_BEGIN_FORMAT
+                    status: 500
+                    message: Unlnown Exception
+  /api/survey/{professor_id}/{survey_id}/stop:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: stop survey
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: survey_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message:
+                      Survey not found
+        '500':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INTERNAL_EXCEPTION:
+                  summary: Unlnown Exception
+                  value:
+                    code: INVALID_DATE_BEGIN_FORMAT
+                    status: 500
+                    message: Unlnown Exception
+  /api/survey/{professor_id}/{survey_id}/delete:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: delete survey
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: survey_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message:
+                      Survey not found
