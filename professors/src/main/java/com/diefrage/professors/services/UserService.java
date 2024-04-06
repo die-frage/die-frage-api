@@ -1,24 +1,28 @@
 package com.diefrage.professors.services;
 
 import com.diefrage.exceptions.TypicalServerException;
+import com.diefrage.professors.entities.Survey;
 import com.diefrage.professors.entities.User;
+import com.diefrage.professors.repositories.SurveyRepository;
 import com.diefrage.professors.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    //    private final SurveyRepository surveyRepository;
-    //    private final StorageService storageService;
+    private final SurveyRepository surveyRepository;
+    private final StorageService storageService;
 
 
     public User getUserById(Long id) {
@@ -76,14 +80,13 @@ public class UserService {
             TypicalServerException.USER_NOT_FOUND.throwException();
         }
         User user = item.get();
-        // TODO: after aws s3 and survey creation of modules
-//        List<String> surveysImages = surveyRepository.findAllByProfessorId(id)
-//                .stream()
-//                .map(Survey::getQrCode)
-//                .collect(Collectors.toList());
-//
-//        for (String s : surveysImages) storageService.deleteImage(s);
-//
+        List<String> surveysImages = surveyRepository.findAllByProfessorId(id)
+                .stream()
+                .map(Survey::getQrCode)
+                .collect(Collectors.toList());
+
+        for (String s : surveysImages) storageService.deleteImage(s);
+
         userRepository.deleteById(id);
         return user;
     }
