@@ -4,6 +4,7 @@ info:
   description: security, authorization and authentication
   version: 1.0.0
 servers:
+  - url: 'http://localhost:8010'
   - url: 'http://localhost:8787'
 
 components:
