@@ -1,0 +1,160 @@
+openapi: 3.0.3
+info:
+  title: Open API die Frage
+  description: security, authorization and authentication
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8787'
+
+components:
+  schemas:
+    SignUpRequest:
+      type: object
+      $ref: '#/components/schemas/SignUpRequest'
+      properties:
+        email:
+          type: string
+          required: true
+        password:
+          type: string
+          required: true
+        firstName:
+          type: string
+          required: true
+        lastName:
+          type: string
+          required: true
+        patronymic:
+          type: string
+          required: false
+    SignInRequest:
+      type: object
+      $ref: '#/components/schemas/SignInRequest'
+      properties:
+        email:
+          type: string
+          required: true
+        password:
+          type: string
+          required: true
+
+
+paths:
+  /auth/sign-up:
+    post:
+      tags:
+        - "Auth Controller"
+      summary: user registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '409':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_ALREADY_EXISTS:
+                  summary: User already exists
+                  value:
+                    code: USER_ALREADY_EXISTS
+                    status: 409
+                    message: User already exists
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_EMAIL_FORMAT:
+                  summary: Invalid email format
+                  value:
+                    code: INVALID_EMAIL_FORMAT
+                    status: 400
+                    message: Invalid email format
+                INVALID_NAME_FORMAT:
+                  summary: Invalid name format
+                  value:
+                    code: INVALID_NAME_FORMAT
+                    status: 400
+                    message: Invalid name format
+                INVALID_PASSWORD_FORMAT:
+                  summary: Invalid password format
+                  value:
+                    code: INVALID_PASSWORD_FORMAT
+                    status: 400
+                    message: Invalid password format
+  /auth/sign-in:
+    post:
+      tags:
+        - "Auth Controller"
+      summary: user login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_EMAIL_FORMAT:
+                  summary: Invalid email format
+                  value:
+                    code: INVALID_EMAIL_FORMAT
+                    status: 400
+                    message: Invalid email format
+                INVALID_PASSWORD_FORMAT:
+                  summary: Invalid password format
+                  value:
+                    code: INVALID_PASSWORD_FORMAT
+                    status: 400
+                    message: Invalid password format
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /auth/validate:
+    get:
+      tags:
+        - "Auth Controller"
+      summary: validate token
+      parameters:
+        - in: query
+          name: token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
