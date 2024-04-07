@@ -68,11 +68,14 @@ public class AuthenticationService {
         return new JwtAuthenticationResponse(jwt);
     }
 
-    public boolean validateToken(String token) {
-        if (!jwtService.validateToken(token)) {
+    public String validateToken(String token) {
+        try {
+            jwtService.validateToken(token);
+            return jwtService.extractUserName(token);
+        } catch (Exception e) {
             TypicalServerException.USER_NOT_FOUND.throwException();
         }
-        return true;
+        return "";
     }
 
     private boolean isValidPassword(String password) {

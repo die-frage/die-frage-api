@@ -3,10 +3,14 @@ package com.diefrage.students;
 import com.diefrage.students.entities.Student;
 import com.diefrage.students.entities.StudentDTO;
 import com.diefrage.students.entities.StudentSignUpRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.HttpHeaders;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @RestController
 @RequestMapping("/api/student")
@@ -18,6 +22,9 @@ public class StudentController {
     @GetMapping("/{student_id}")
     @Operation(summary = "Получение информацию о пользователе")
     public StudentDTO getStudentById(@PathVariable(value = "student_id") Long studentId) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String username = request.getHeader("X-Username");
+        System.out.println(username);
         return StudentDTO.fromStudent(studentService.getStudentById(studentId));
     }
 

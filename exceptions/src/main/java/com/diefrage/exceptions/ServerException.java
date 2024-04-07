@@ -15,6 +15,7 @@ public class ServerException extends RuntimeException {
     String code;
     String message;
 
+
     public ServerException(@NotNull HttpStatus status, String code, String message) {
         this.status = status;
         this.code = code;

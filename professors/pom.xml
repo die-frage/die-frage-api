@@ -105,6 +105,23 @@
             <artifactId>javase</artifactId>
             <version>3.4.1</version> <!-- Замените на актуальную версию -->
         </dependency>
+        <dependency>
+            <groupId>com.diefrage</groupId>
+            <artifactId>exceptions</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.11.787</version>
+        </dependency>
+        <dependency>
+            <groupId>com.diefrage</groupId>
+            <artifactId>exceptions</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>

@@ -30,7 +30,7 @@ public class AuthController {
 
     @Operation(summary = "Валидация токена для аутентификации")
     @GetMapping("/validate")
-    public Boolean validateToken(@RequestParam(name = "token") String token) {
+    public String validateToken(@RequestParam(name = "token") String token) {
         return authenticationService.validateToken(token);
     }
 }

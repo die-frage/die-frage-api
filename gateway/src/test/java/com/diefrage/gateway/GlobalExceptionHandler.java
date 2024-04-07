@@ -1,4 +1,4 @@
-package com.diefrage.jwt;
+package com.diefrage.gateway;
 
 import com.diefrage.exceptions.ServerException;
 import org.springframework.http.ResponseEntity;
