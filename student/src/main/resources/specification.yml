@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: Open API die Frage
+  description: urls for students
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8020'
+  - url: 'http://localhost:8787'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    StudentSignUpRequest:
+      type: object
+      $ref: '#/components/schemas/StudentSignUpRequest'
+      properties:
+        email:
+          type: string
+          required: true
+        group_number:
+          type: string
+          required: true
+        name:
+          type: string
+          required: true
+
+    StudentDTO:
+      type: object
+      $ref: '#/components/schemas/StudentDTO'
+      properties:
+        studentId:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        groupNumber:
+          type: string
+
+paths:
+  /api/student/registration:
+    post:
+      tags:
+        - "Student Controller"
+      summary: registration of student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentSignUpRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_EMAIL_FORMAT:
+                  summary: Invalid email format
+                  value:
+                    code: INVALID_EMAIL_FORMAT
+                    status: 400
+                    message: Invalid email format
+  /api/student/{studentId}:
+    get:
+      security:
+      - bearerAuth: [ ]
+      tags:
+        - "Student Controller"
+      summary: get info about one student by id
+      parameters:
+        - in: path
+          name: studentId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /api/student/:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Student Controller"
+      summary: get info about student by email
+      parameters:
+        - in: query
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /api/student/delete/{studenId}:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Student Controller"
+      summary: student delete all info
+      parameters:
+        - in: path
+          name: studenId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_EMAIL_FORMAT:
+                  summary: Invalid email format
+                  value:
+                    code: INVALID_EMAIL_FORMAT
+                    status: 400
+                    message: Invalid email format
+                WRONG_LOGIN_PASSWORD:
+                  summary: Wrong login or password
+                  value:
+                    code: WRONG_LOGIN_PASSWORD
+                    status: 400
+                    message: Wrong login or password
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
