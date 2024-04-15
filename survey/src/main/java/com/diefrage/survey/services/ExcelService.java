@@ -1,8 +1,8 @@
 package com.diefrage.survey.services;
 
 import com.diefrage.exceptions.TypicalServerException;
-import com.diefrage.professor.entities.JSONQuestion;
-import com.diefrage.professor.entities.SurveyRequest;
+import com.diefrage.survey.entities.JSONQuestion;
+import com.diefrage.survey.entities.SurveyRequest;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

@@ -1,10 +1,11 @@
 package com.diefrage.survey.controllers;
 
-import com.diefrage.professor.entities.SurveyDTO;
-import com.diefrage.professor.entities.SurveyRequest;
-import com.diefrage.professor.services.SurveyService;
+import com.diefrage.survey.entities.SurveyDTO;
+import com.diefrage.survey.entities.SurveyRequest;
+import com.diefrage.survey.services.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.diefrage.survey.repositories;
 
-import com.diefrage.professor.entities.Survey;
+import com.diefrage.survey.entities.Survey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,11 +1,11 @@
 package com.diefrage.survey.services;
 
 import com.diefrage.exceptions.TypicalServerException;
-import com.diefrage.professor.entities.Survey;
-import com.diefrage.professor.entities.SurveyRequest;
-import com.diefrage.professor.entities.SurveyStatus;
-import com.diefrage.professor.repositories.StatusRepository;
-import com.diefrage.professor.repositories.SurveyRepository;
+import com.diefrage.survey.entities.Survey;
+import com.diefrage.survey.entities.SurveyRequest;
+import com.diefrage.survey.entities.SurveyStatus;
+import com.diefrage.survey.repositories.StatusRepository;
+import com.diefrage.survey.repositories.SurveyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
