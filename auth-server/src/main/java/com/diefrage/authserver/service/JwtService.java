@@ -59,10 +59,6 @@ public class JwtService {
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-//    public boolean validateToken(String token){
-//        return !isTokenExpired(token);
-//    }
-
     public void validateToken(String token) {
         Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
     }

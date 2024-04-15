@@ -28,30 +28,18 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     @Override
     public GatewayFilter apply(Config config) {
         return (((exchange, chain) -> {
-            System.out.println(exchange.getRequest().getPath());
-            System.out.println(exchange.getRequest().getHeaders());
-            System.out.println(exchange.getRequest().getCookies());
-            System.out.println(exchange.getRequest().getId());
-            System.out.println(exchange.getRequest().getLocalAddress());
-            System.out.println(exchange.getRequest().getQueryParams());
-            System.out.println(exchange.getRequest().getRemoteAddress());
-            System.out.println(exchange.getRequest().getSslInfo());
-            System.out.println(exchange.getRequest().getBody());
-            System.out.println(exchange.getRequest().getMethod());
-
             if (validator.isSecured.test(exchange.getRequest())) {
                 // header contains or not token
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     TypicalServerException.USER_NOT_FOUND.throwException();
                 }
-
                 String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
 
-                if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                    authHeader = authHeader.substring(7);
-                }
-                try{
-                    String username = restTemplate.getForObject("http://localhost:8010/auth/validate?token=" + authHeader, String.class);
+                String token = "";
+                if (authHeader != null && authHeader.startsWith("Bearer ")) token = authHeader.substring(7);
+
+                try {
+                    String username = restTemplate.getForObject("http://localhost:8010/auth/validate?token=" + token, String.class);
                     System.out.println(username);
 
                     // Добавляем имя пользователя в заголовок
