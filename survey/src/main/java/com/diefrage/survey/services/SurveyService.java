@@ -6,10 +6,11 @@ import com.diefrage.survey.entities.SurveyRequest;
 import com.diefrage.survey.entities.SurveyStatus;
 import com.diefrage.survey.repositories.StatusRepository;
 import com.diefrage.survey.repositories.SurveyRepository;
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -20,9 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SurveyService {
     private final StorageService storageService;
-//    private final UserService userService;
     private final ExcelService excelService;
-
     private final SurveyRepository surveyRepository;
     private final StatusRepository statusRepository;
 
@@ -32,10 +31,6 @@ public class SurveyService {
 
     @Transactional
     public List<Survey> getAllSurveysByProfessorId(Long professorId) {
-//        User user = userService.getCurrentUser();
-//        if (!user.getId().equals(professorId) || !userRepository.existsById(professorId)) {
-//            TypicalServerException.USER_NOT_FOUND.throwException();
-//        }
         return surveyRepository.findAllByProfessorId(professorId);
     }
 
@@ -98,9 +93,9 @@ public class SurveyService {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
         Survey survey = surveyOptional.get();
-        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
-            TypicalServerException.SURVEY_NOT_FOUND.throwException();
-        }
+//        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
+//            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+//        }
 
         if (!Objects.equals(survey.getStatus().getStatusId(), CREATED_STATUS_ID)) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
@@ -126,9 +121,9 @@ public class SurveyService {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
         Survey survey = surveyOptional.get();
-        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
-            TypicalServerException.SURVEY_NOT_FOUND.throwException();
-        }
+//        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
+//            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+//        }
 
         if (!Objects.equals(survey.getStatus().getStatusId(), CREATED_STATUS_ID)) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
@@ -156,9 +151,9 @@ public class SurveyService {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
         Survey survey = surveyOptional.get();
-        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
-            TypicalServerException.SURVEY_NOT_FOUND.throwException();
-        }
+//        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
+//            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+//        }
         if (!Objects.equals(survey.getStatus().getStatusId(), STARTED_STATUS_ID)) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
@@ -185,9 +180,9 @@ public class SurveyService {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
         Survey survey = surveyOptional.get();
-        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
-            TypicalServerException.SURVEY_NOT_FOUND.throwException();
-        }
+//        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
+//            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+//        }
         storageService.deleteImage(survey.getQrCode());
         surveyRepository.delete(survey);
         return survey;

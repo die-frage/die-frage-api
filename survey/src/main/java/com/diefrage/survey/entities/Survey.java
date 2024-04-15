@@ -8,10 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Check;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
-import org.springframework.data.annotation.Id;
+
 
 import java.util.Date;
 import java.util.List;
@@ -31,10 +29,11 @@ public class Survey {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "professor_id", nullable = false)
-    private User professor;
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "professor_id", nullable = false)
+    private Long professorId;
 
     @Column(name = "date_begin")
     @JsonFormat(pattern = "yyyy-MM-dd")

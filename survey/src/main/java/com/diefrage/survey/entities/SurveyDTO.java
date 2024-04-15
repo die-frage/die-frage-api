@@ -8,6 +8,8 @@ import java.util.List;
 public record SurveyDTO(
         @JsonProperty("id") Long id,
         @JsonProperty("title") String title,
+        @JsonProperty("description") String description,
+        @JsonProperty("professor_id") Long professorId,
         @JsonProperty("max_students") Integer maxStudents,
         @JsonProperty("code") String code,
         @JsonProperty("link") String link,
@@ -22,6 +24,8 @@ public record SurveyDTO(
         return new SurveyDTO(
                 survey.getSurveyId(),
                 survey.getTitle(),
+                survey.getDescription(),
+                survey.getProfessorId(),
                 survey.getMaxStudents(),
                 survey.getCode(),
                 survey.getLink(),
