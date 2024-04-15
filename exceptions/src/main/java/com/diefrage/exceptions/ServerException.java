@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
+
 import java.util.Map;
 
 @Getter
@@ -14,7 +15,6 @@ public class ServerException extends RuntimeException {
     HttpStatus status;
     String code;
     String message;
-
 
     public ServerException(@NotNull HttpStatus status, String code, String message) {
         this.status = status;
