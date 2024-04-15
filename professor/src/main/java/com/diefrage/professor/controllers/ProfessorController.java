@@ -17,15 +17,19 @@ public class ProfessorController {
     @GetMapping("/{id}")
     @Operation(summary = "Получение информацию о пользователе")
     public UserDTO getProfessorById(
-            @PathVariable(value = "id") Long id) {
-        return UserDTO.fromUser(userService.getUserById(id));
+            @PathVariable(value = "id") Long id,
+            @RequestHeader(value = "X-Username") String username) {
+        User userRequest = userService.getUserByEmail(username);
+        return UserDTO.fromUser(userService.getUserById(userRequest, id));
     }
 
     @GetMapping("by_email/{email}")
     @Operation(summary = "Получение информацию о пользователе")
     public UserDTO getProfessorByEmail(
-            @PathVariable(value = "email") String email) {
-        return UserDTO.fromUser(userService.getUserByEmail(email));
+            @PathVariable(value = "email") String email,
+            @RequestHeader(value = "X-Username") String username) {
+        User userRequest = userService.getUserByEmail(username);
+        return UserDTO.fromUser(userService.getUserByEmail(userRequest, email));
     }
 
     @PutMapping("/credentials/{id}")
@@ -36,15 +40,19 @@ public class ProfessorController {
             @RequestParam(value = "lastName") String lastName,
             @RequestParam(value = "patronymic", required = false) String patronymic,
             @RequestParam(value = "email") String email,
-            @RequestParam(value = "password") String password) {
-        User prof = userService.updateUserById(id, firstName, lastName, patronymic, email, password);
+            @RequestParam(value = "password") String password,
+            @RequestHeader(value = "X-Username") String username) {
+        User userRequest = userService.getUserByEmail(username);
+        User prof = userService.updateUserById(userRequest, id, firstName, lastName, patronymic, email, password);
         return UserDTO.fromUser(prof);
     }
 
     @DeleteMapping("/delete/{id}")
     @Operation(summary = "Удаление пользователя")
     public UserDTO deleteProfessor(
-            @PathVariable(value = "id") Long id) {
-        return UserDTO.fromUser(userService.deleteUserById(id));
+            @PathVariable(value = "id") Long id,
+            @RequestHeader(value = "X-Username") String username) {
+        User userRequest = userService.getUserByEmail(username);
+        return UserDTO.fromUser(userService.deleteUserById(userRequest, id));
     }
 }

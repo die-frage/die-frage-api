@@ -13,5 +13,4 @@ public class ConfigurationUser {
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

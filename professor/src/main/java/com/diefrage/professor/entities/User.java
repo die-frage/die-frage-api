@@ -3,7 +3,6 @@ package com.diefrage.professor.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @Builder
 @Getter

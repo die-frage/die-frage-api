@@ -1,37 +1,45 @@
 package com.diefrage.professor.services;
 
 import com.diefrage.exceptions.TypicalServerException;
-import com.diefrage.professor.entities.Survey;
 import com.diefrage.professor.entities.User;
-import com.diefrage.professor.repositories.SurveyRepository;
 import com.diefrage.professor.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SurveyRepository surveyRepository;
-    private final StorageService storageService;
+//    private final SurveyRepository surveyRepository;
+//    private final StorageService storageService;
 
 
-    public User getUserById(Long id) {
+    public User getUserById(User userRequest, Long id) {
+        if (!Objects.equals(userRequest.getId(), id)){
+            TypicalServerException.USER_NOT_FOUND.throwException();
+        }
         Optional<User> item = userRepository.findById(id);
         if (item.isEmpty()) {
             TypicalServerException.USER_NOT_FOUND.throwException();
         }
         return item.get();
     }
+
+    public User getUserByEmail(User userRequest, String email) {
+        if (!Objects.equals(userRequest.getEmail(), email)){
+            TypicalServerException.USER_NOT_FOUND.throwException();
+        }
+        return getUserByEmail(email);
+    }
+
+
     public User getUserByEmail(String email) {
         Optional<User> item = userRepository.findByEmail(email);
         if (item.isEmpty()) {
@@ -40,7 +48,11 @@ public class UserService {
         return item.get();
     }
 
-    public User updateUserById(Long id, String firstName, String lastName, String patronymic, String email, String password) {
+    public User updateUserById(User userRequest, Long id, String firstName, String lastName, String patronymic, String email, String password) {
+        if (!Objects.equals(userRequest.getId(), id)){
+            TypicalServerException.USER_NOT_FOUND.throwException();
+        }
+
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent() && !Objects.equals(optionalUser.get().getId(), id)) {
             TypicalServerException.USER_ALREADY_EXISTS.throwException();
@@ -74,18 +86,23 @@ public class UserService {
 
         return update(user);
     }
-    public User deleteUserById(Long id) {
+
+    public User deleteUserById(User userRequest, Long id) {
+        if (!Objects.equals(userRequest.getId(), id)){
+            TypicalServerException.USER_NOT_FOUND.throwException();
+        }
+
         Optional<User> item = userRepository.findById(id);
         if (item.isEmpty()) {
             TypicalServerException.USER_NOT_FOUND.throwException();
         }
         User user = item.get();
-        List<String> surveysImages = surveyRepository.findAllByProfessorId(id)
-                .stream()
-                .map(Survey::getQrCode)
-                .collect(Collectors.toList());
-
-        for (String s : surveysImages) storageService.deleteImage(s);
+//        List<String> surveysImages = surveyRepository.findAllByProfessorId(id)
+//                .stream()
+//                .map(Survey::getQrCode)
+//                .collect(Collectors.toList());
+//
+//        for (String s : surveysImages) storageService.deleteImage(s);
 
         userRepository.deleteById(id);
         return user;
