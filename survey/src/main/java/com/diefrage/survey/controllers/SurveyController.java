@@ -27,6 +27,16 @@ public class SurveyController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @GetMapping("/{professor_id}/{survey_id}")
+    public SurveyDTO getAllSurveysByProfessor(
+            @PathVariable(value = "professor_id") Long professorId,
+            @PathVariable(value = "survey_id") Long surveyId,
+            @RequestHeader(value = "X-Username") String username) {
+        if (validateUserRequest(professorId, username))
+            return SurveyDTO.fromSurvey(surveyService.getSurveyById(surveyId, professorId, username));
+        return null;
+    }
+
     @GetMapping("/{professor_id}/all")
     public List<SurveyDTO> getAllSurveysByProfessor(
             @PathVariable(value = "professor_id") Long professorId,
