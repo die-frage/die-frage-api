@@ -1,5 +1,7 @@
 package com.diefrage.authserver;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -21,20 +24,29 @@ class AuthServerApplicationTests {
     @Autowired
     private MockMvc mockMvc;
 
+    private String tokenTestUser;
+
     @Test
     void testSignIn() throws Exception {
-        String signInRequestJson = "{\"email\":\"string@string.ru\", \"password\":\"123456789\"}";
-        mockMvc.perform(post("/auth/sign-in")
+        String signInRequestJson = "{\"email\":\"test@test.ru\", \"password\":\"123456789\"}";
+
+        MvcResult result = mockMvc.perform(post("/auth/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(signInRequestJson))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.token").exists());
+                .andExpect(jsonPath("$.token").exists())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        JsonNode jsonNode = new ObjectMapper().readTree(jsonResponse);
+        tokenTestUser = jsonNode.get("token").asText();
+        System.out.println(tokenTestUser);
     }
 
     @Test
     void testSignUp() throws Exception {
-        String signUpRequestJson = "{\"email\":\"testuser" + System.currentTimeMillis() + "@mail.ru\"," +
+        String signUpRequestJson = "{\"email\":\"test" + System.currentTimeMillis() + "@mail.ru\"," +
                 " \"password\":\"testpassword\"," +
                 "\"lastName\": \"test\"," +
                 "\"firstName\": \"test\"," +
@@ -50,17 +62,17 @@ class AuthServerApplicationTests {
 
     @Test
     void testValidateToken() throws Exception {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwiaWQiOjEsImVtYWlsIjoic3RyaW5nQHN0cmluZy5ydSIsInN1YiI6InN0cmluZ0BzdHJpbmcucnUiLCJpYXQiOjE3MTMxMTU0NTUsImV4cCI6MTcxMzI1OTQ1NX0.uh8OcB0qnOjDhKEFbYhD3fH6nXP2deKbb5SuVKBYTJ0";
+        if (tokenTestUser == null) testSignIn();
 
         mockMvc.perform(get("/auth/validate")
-                        .param("token", token))
+                        .param("token", tokenTestUser))
                 .andExpect(status().isOk())
-                .andExpect(content().string("string@string.ru"));
+                .andExpect(content().string("test@test.ru"));
     }
 
     @Test
     void testWrongLogin() throws Exception {
-        String signInRequestJson = "{\"email\":\"string1@string.ru\", \"password\":\"123456789\"}";
+        String signInRequestJson = "{\"email\":\"testtest@test.ru\", \"password\":\"123456789\"}";
         mockMvc.perform(post("/auth/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(signInRequestJson))
@@ -70,7 +82,7 @@ class AuthServerApplicationTests {
 
     @Test
     void testWrongPassword() throws Exception {
-        String signInRequestJson = "{\"email\":\"string@string.ru\", \"password\":\"0123456789\"}";
+        String signInRequestJson = "{\"email\":\"test@test.ru\", \"password\":\"0123456789\"}";
 
         mockMvc.perform(post("/auth/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -81,7 +93,7 @@ class AuthServerApplicationTests {
 
     @Test
     void testUserAlreadyExists() throws Exception {
-        String signUpRequestJson = "{\"email\":\"string@string.ru\"," +
+        String signUpRequestJson = "{\"email\":\"test@test.ru\"," +
                 " \"password\":\"testpassword\"," +
                 "\"lastName\": \"test\"," +
                 "\"firstName\": \"test\"," +
