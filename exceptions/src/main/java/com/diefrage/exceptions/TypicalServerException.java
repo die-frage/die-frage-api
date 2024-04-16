@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum TypicalServerException {
     USER_NOT_FOUND(new ServerException(HttpStatus.NOT_FOUND, "USER_NOT_FOUND", "USER_NOT_FOUND")),
+    STUDENT_NOT_FOUND(new ServerException(HttpStatus.NOT_FOUND, "STUDENT_NOT_FOUND", "STUDENT_NOT_FOUND")),
     SURVEY_NOT_FOUND(new ServerException(HttpStatus.NOT_FOUND, "SURVEY_NOT_FOUND", "SURVEY_NOT_FOUND")),
     ANSWER_NOT_FOUND(new ServerException(HttpStatus.NOT_FOUND, "ANSWER_NOT_FOUND", "ANSWER_NOT_FOUND")),
     WRONG_LOGIN_PASSWORD(new ServerException(HttpStatus.BAD_REQUEST, "WRONG_LOGIN_PASSWORD", "WRONG_LOGIN_PASSWORD")),
