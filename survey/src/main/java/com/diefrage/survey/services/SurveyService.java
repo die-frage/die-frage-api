@@ -25,9 +25,9 @@ public class SurveyService {
     private final SurveyRepository surveyRepository;
     private final StatusRepository statusRepository;
 
-    private final Long CREATED_STATUS_ID = 1L;
-    private final Long STARTED_STATUS_ID = 2L;
-    private final Long FINISHED_STATUS_ID = 3L;
+    private final Long CREATED_STATUS = 1L;
+    private final Long STARTED_STATUS = 2L;
+    private final Long FINISHED_STATUS = 3L;
 
     @Transactional
     public List<Survey> getAllSurveysByProfessorId(Long professorId) {
@@ -35,44 +35,38 @@ public class SurveyService {
     }
 
     @Transactional
-    public List<Survey> getAllSurveysByProfessorIdAndName(Long professorId, String survey_name) {
-//        User user = userService.getCurrentUser();
-//        if (!user.getId().equals(professorId) || !userRepository.existsById(professorId)) {
-//            TypicalServerException.USER_NOT_FOUND.throwException();
-//        }
+    public List<Survey> getAllSurveysByProfessorIdAndName(Long professorId, String surveyName) {
         return surveyRepository.findAllByProfessorId(professorId)
                 .stream()
-                .filter(survey -> survey.getTitle().equalsIgnoreCase(survey_name))
+                .filter(survey -> survey.getTitle().equalsIgnoreCase(surveyName))
                 .toList();
     }
 
     @Transactional
     public Survey addNewSurvey(Long professorId, SurveyRequest surveyRequest) {
-//        User user = userService.getCurrentUser();
-//        if (!user.getId().equals(professorId) || !userRepository.existsById(professorId)) {
-//            TypicalServerException.USER_NOT_FOUND.throwException();
-//        }
-        Optional<SurveyStatus> surveyStatus = statusRepository.findById(CREATED_STATUS_ID);
+        Optional<SurveyStatus> surveyStatus = statusRepository.findById(CREATED_STATUS);
         if (surveyStatus.isEmpty()) {
             TypicalServerException.INTERNAL_EXCEPTION.throwException();
         }
-        SurveyStatus status = surveyStatus.get();
-
         Survey newSurvey = new Survey();
-        String code = String.valueOf(newSurvey.hashCode());
 
-//        newSurvey.setProfessor(user);
         newSurvey.setTitle(surveyRequest.getTitle());
+        newSurvey.setDescription(surveyRequest.getDescription());
+        newSurvey.setProfessorId(professorId);
         newSurvey.setAnonymous(surveyRequest.getAnonymous());
         newSurvey.setMaxStudents(surveyRequest.getMax_students());
+
+        SurveyStatus status = surveyStatus.get();
         newSurvey.setStatus(status);
         newSurvey.setDateBegin(surveyRequest.getDate_begin());
         newSurvey.setDateEnd(surveyRequest.getDate_end());
         newSurvey.setQuestions(surveyRequest.getQuestions());
 
+        String code = String.valueOf(newSurvey.hashCode());
         newSurvey.setCode(code);
         newSurvey.setLink(storageService.getTelegramLink(code));
         newSurvey.setQrCode(storageService.uploadFile(code));
+
         return surveyRepository.save(newSurvey);
     }
 
@@ -81,27 +75,24 @@ public class SurveyService {
         return excelService.parseSurvey(file);
     }
 
-
     @Transactional
     public Survey updateSurvey(Long professorId, Long surveyId, SurveyRequest surveyRequest) {
-//        User user = userService.getCurrentUser();
-//        if (!user.getId().equals(professorId) || !userRepository.existsById(professorId)) {
-//            TypicalServerException.USER_NOT_FOUND.throwException();
-//        }
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
         if (surveyOptional.isEmpty()) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
-        Survey survey = surveyOptional.get();
-//        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
-//            TypicalServerException.SURVEY_NOT_FOUND.throwException();
-//        }
 
-        if (!Objects.equals(survey.getStatus().getStatusId(), CREATED_STATUS_ID)) {
+        Survey survey = surveyOptional.get();
+        if (!Objects.equals(survey.getProfessorId(), professorId)) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+
+        if (!Objects.equals(survey.getStatus().getStatusId(), CREATED_STATUS)) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
 
         survey.setTitle(surveyRequest.getTitle());
+        survey.setDescription(surveyRequest.getDescription());
         survey.setAnonymous(surveyRequest.getAnonymous());
         survey.setMaxStudents(surveyRequest.getMax_students());
         survey.setDateBegin(surveyRequest.getDate_begin());
@@ -112,24 +103,20 @@ public class SurveyService {
 
     @Transactional
     public Survey startSurvey(Long professorId, Long surveyId) {
-//        User user = userService.getCurrentUser();
-//        if (!user.getId().equals(professorId) || !userRepository.existsById(professorId)) {
-//            TypicalServerException.USER_NOT_FOUND.throwException();
-//        }
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
         if (surveyOptional.isEmpty()) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
         Survey survey = surveyOptional.get();
-//        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
-//            TypicalServerException.SURVEY_NOT_FOUND.throwException();
-//        }
-
-        if (!Objects.equals(survey.getStatus().getStatusId(), CREATED_STATUS_ID)) {
+        if (!Objects.equals(survey.getProfessorId(), professorId)) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
 
-        Optional<SurveyStatus> surveyStatus = statusRepository.findById(STARTED_STATUS_ID);
+        if (!Objects.equals(survey.getStatus().getStatusId(), CREATED_STATUS)) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+
+        Optional<SurveyStatus> surveyStatus = statusRepository.findById(STARTED_STATUS);
         if (surveyStatus.isEmpty()) {
             TypicalServerException.INTERNAL_EXCEPTION.throwException();
         }
@@ -142,23 +129,15 @@ public class SurveyService {
 
     @Transactional
     public Survey stopSurvey(Long professorId, Long surveyId) {
-//        User user = userService.getCurrentUser();
-//        if (!user.getId().equals(professorId) || !userRepository.existsById(professorId)) {
-//            TypicalServerException.USER_NOT_FOUND.throwException();
-//        }
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
         if (surveyOptional.isEmpty()) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
         Survey survey = surveyOptional.get();
-//        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
-//            TypicalServerException.SURVEY_NOT_FOUND.throwException();
-//        }
-        if (!Objects.equals(survey.getStatus().getStatusId(), STARTED_STATUS_ID)) {
+        if (!Objects.equals(survey.getProfessorId(), professorId)) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
-
-        Optional<SurveyStatus> surveyStatus = statusRepository.findById(FINISHED_STATUS_ID);
+        Optional<SurveyStatus> surveyStatus = statusRepository.findById(FINISHED_STATUS);
         if (surveyStatus.isEmpty()) {
             TypicalServerException.INTERNAL_EXCEPTION.throwException();
         }
@@ -171,20 +150,25 @@ public class SurveyService {
 
     @Transactional
     public Survey deleteSurvey(Long professorId, Long surveyId) {
-//        User user = userService.getCurrentUser();
-//        if (!user.getId().equals(professorId) || !userRepository.existsById(professorId)) {
-//            TypicalServerException.USER_NOT_FOUND.throwException();
-//        }
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
         if (surveyOptional.isEmpty()) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
         Survey survey = surveyOptional.get();
-//        if (!Objects.equals(survey.getProfessor().getId(), professorId)) {
-//            TypicalServerException.SURVEY_NOT_FOUND.throwException();
-//        }
+        if (!Objects.equals(survey.getProfessorId(), professorId)) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
         storageService.deleteImage(survey.getQrCode());
         surveyRepository.delete(survey);
         return survey;
+    }
+
+    @Transactional
+    public void deleteAllSurveys(Long professorId) {
+        List<Survey> surveys = getAllSurveysByProfessorId(professorId);
+        for (Survey survey : surveys){
+            storageService.deleteImage(survey.getQrCode());
+            surveyRepository.delete(survey);
+        }
     }
 }

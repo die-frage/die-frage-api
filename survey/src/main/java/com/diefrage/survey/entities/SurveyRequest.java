@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class SurveyRequest {
     private String title;
+    private String description;
     private Integer max_students;
     private Boolean anonymous;
     private List<JSONQuestion> questions;

@@ -27,8 +27,6 @@ public class SurveyController {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String professorServiceUrl = "http://localhost:8030";
-
     @GetMapping("/{professor_id}/all")
     public List<SurveyDTO> getAllSurveysByProfessor(
             @PathVariable(value = "professor_id") Long professorId,
@@ -45,11 +43,10 @@ public class SurveyController {
     @GetMapping("/{professor_id}/by_name")
     public List<SurveyDTO> getAllSurveysByProfessorAndName(
             @PathVariable(value = "professor_id") Long professorId,
-            @RequestParam(value = "survey_name") String survey_name,
+            @RequestParam(value = "survey_name") String surveyName,
             @RequestHeader(value = "X-Username") String username) {
-
         if (validateUserRequest(professorId, username)) {
-            return surveyService.getAllSurveysByProfessorIdAndName(professorId, survey_name)
+            return surveyService.getAllSurveysByProfessorIdAndName(professorId, surveyName)
                     .stream()
                     .map(SurveyDTO::fromSurvey)
                     .toList();
@@ -62,9 +59,8 @@ public class SurveyController {
             @PathVariable(value = "professor_id") Long professorId,
             @RequestBody SurveyRequest surveyRequest,
             @RequestHeader(value = "X-Username") String username) {
-        if (validateUserRequest(professorId, username)) {
+        if (validateUserRequest(professorId, username))
             return SurveyDTO.fromSurvey(surveyService.addNewSurvey(professorId, surveyRequest));
-        }
         return null;
     }
 
@@ -125,6 +121,13 @@ public class SurveyController {
         return null;
     }
 
+    @DeleteMapping("/{professor_id}/delete/all")
+    public void deleteAllSurveys(
+            @PathVariable(value = "professor_id") Long professorId,
+            @RequestHeader(value = "X-Username") String username) {
+        if (validateUserRequest(professorId, username)) surveyService.deleteAllSurveys(professorId);
+    }
+
     private HttpHeaders createHeadersWithUsername(String username) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Username", username);
@@ -133,6 +136,7 @@ public class SurveyController {
 
     private boolean validateUserRequest(Long professorId, String username) {
         try {
+            String professorServiceUrl = "http://localhost:8030";
             ResponseEntity<UserDTO> professorResponse = restTemplate.exchange(
                     professorServiceUrl + "/api/professor/" + professorId,
                     HttpMethod.GET,
