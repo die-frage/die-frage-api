@@ -13,6 +13,7 @@ public class RoutValidator {
             "/auth/sign-up",
             "/auth/sign-in",
             "/auth/validate",
+            "/api/student",
             "eureka"
     );
 

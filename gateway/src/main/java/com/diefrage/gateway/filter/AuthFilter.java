@@ -7,10 +7,7 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Objects;
 
 @Component
 public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> {
@@ -40,11 +37,10 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
 
                 try {
                     String username = restTemplate.getForObject("http://localhost:8010/auth/validate?token=" + token, String.class);
-                    System.out.println(username);
 
                     // Добавляем имя пользователя в заголовок
                     ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
-                            .header("X-Username", username) // здесь "X-Username" - имя заголовка, в котором будет храниться имя пользователя
+                            .header("X-Username", username)
                             .build();
 
                     // Передаем измененный запрос в цепочку фильтров
