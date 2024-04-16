@@ -3,11 +3,11 @@ package com.diefrage.answer.services;
 import com.diefrage.answer.entities.AnonymousAnswer;
 import com.diefrage.answer.entities.Answer;
 import com.diefrage.answer.entities.dto.JSONAnswer;
+import com.diefrage.answer.entities.dto.StudentDTO;
+import com.diefrage.answer.entities.dto.SurveyDTO;
 import com.diefrage.answer.repositories.AnonymousAnswerRepository;
 import com.diefrage.answer.repositories.AnswerRepository;
 import com.diefrage.exceptions.TypicalServerException;
-import com.diefrage.student.entities.StudentDTO;
-import com.diefrage.survey.entities.SurveyDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

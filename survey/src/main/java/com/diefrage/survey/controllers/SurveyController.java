@@ -1,8 +1,8 @@
 package com.diefrage.survey.controllers;
 
 import com.diefrage.exceptions.TypicalServerException;
-import com.diefrage.professor.entities.UserDTO;
 import com.diefrage.survey.entities.SurveyDTO;
+import com.diefrage.survey.entities.UserDTO;
 import com.diefrage.survey.entities.requests.SurveyRequest;
 import com.diefrage.survey.services.SurveyService;
 import lombok.RequiredArgsConstructor;
