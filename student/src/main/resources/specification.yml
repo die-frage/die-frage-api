@@ -93,12 +93,12 @@ paths:
           content:
             application/json:
               examples:
-                USER_NOT_FOUND:
-                  summary: User not found
+                STUDENT_NOT_FOUND:
+                  summary: Student not found
                   value:
-                    code: USER_NOT_FOUND
+                    code: STUDENT_NOT_FOUND
                     status: 404
-                    message: User not found
+                    message: Student not found
   /api/student/:
     get:
       security:
@@ -124,12 +124,12 @@ paths:
           content:
             application/json:
               examples:
-                USER_NOT_FOUND:
-                  summary: User not found
+                STUDENT_NOT_FOUND:
+                  summary: Student not found
                   value:
-                    code: USER_NOT_FOUND
+                    code: STUDENT_NOT_FOUND
                     status: 404
-                    message: User not found
+                    message: Student not found
   /api/student/delete/{studenId}:
     delete:
       security:
@@ -161,15 +161,9 @@ paths:
                     code: INVALID_EMAIL_FORMAT
                     status: 400
                     message: Invalid email format
-                WRONG_LOGIN_PASSWORD:
-                  summary: Wrong login or password
+                STUDENT_NOT_FOUND:
+                  summary: Student not found
                   value:
-                    code: WRONG_LOGIN_PASSWORD
-                    status: 400
-                    message: Wrong login or password
-                USER_NOT_FOUND:
-                  summary: User not found
-                  value:
-                    code: USER_NOT_FOUND
+                    code: STUDENT_NOT_FOUND
                     status: 404
-                    message: User not found
+                    message: Student not found

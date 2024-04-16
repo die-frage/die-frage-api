@@ -18,14 +18,10 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
-    }
-
     public Student getStudentById(Long studentId) {
         Optional<Student> item = studentRepository.findById(studentId);
         if (item.isEmpty()) {
-            TypicalServerException.USER_NOT_FOUND.throwException();
+            TypicalServerException.STUDENT_NOT_FOUND.throwException();
         }
         return item.get();
     }
@@ -33,7 +29,7 @@ public class StudentService {
     public Student getStudentByEmail(String email) {
         Optional<Student> item = studentRepository.findByEmail(email);
         if (item.isEmpty()) {
-            TypicalServerException.USER_NOT_FOUND.throwException();
+            TypicalServerException.STUDENT_NOT_FOUND.throwException();
         }
         return item.get();
     }
@@ -53,21 +49,11 @@ public class StudentService {
     public Student deleteStudent(Long studentId) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
         if (studentOptional.isEmpty()) {
-            TypicalServerException.USER_NOT_FOUND.throwException();
+            TypicalServerException.STUDENT_NOT_FOUND.throwException();
         }
         studentRepository.deleteById(studentId);
         return studentOptional.get();
 
-    }
-
-    private boolean isValidName(String name) {
-        if (name == null) {
-            return true;
-        }
-        String nameRegex = "[a-zA-Zа-яА-Я]{2,100}";
-        Pattern pattern = Pattern.compile(nameRegex);
-        Matcher matcher = pattern.matcher(name);
-        return matcher.matches();
     }
 
     private boolean isValidEmail(String email) {

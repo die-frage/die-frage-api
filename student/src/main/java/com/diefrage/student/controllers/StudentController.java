@@ -20,31 +20,26 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/{student_id}")
-    @Operation(summary = "Получение информацию о пользователе")
+    @Operation(summary = "Получение информацию о студенте")
     public StudentDTO getStudentById(@PathVariable(value = "student_id") Long studentId) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String username = request.getHeader("X-Username");
-        System.out.println(username);
         return StudentDTO.fromStudent(studentService.getStudentById(studentId));
     }
 
     @GetMapping("/")
-    @Operation(summary = "Получение информацию о пользователе")
+    @Operation(summary = "Получение информации о студенте")
     public StudentDTO getStudentByEmail(@RequestParam(value = "email") String email) {
         return StudentDTO.fromStudent(studentService.getStudentByEmail(email));
     }
 
     @PostMapping("/registration")
     @Operation(summary = "Создание новой записи о студенте")
-    public StudentDTO registration(
-            @RequestBody StudentRequest request) {
+    public StudentDTO registration(@RequestBody StudentRequest request) {
         return StudentDTO.fromStudent(studentService.register(request));
     }
 
     @DeleteMapping("/delete/{student_id}")
     @Operation(summary = "Удаление записи о студенте")
-    public StudentDTO deleteStudent(
-            @PathVariable(value = "student_id") Long studentId) {
+    public StudentDTO deleteStudent(@PathVariable(value = "student_id") Long studentId) {
         Student student = studentService.deleteStudent(studentId);
         return StudentDTO.fromStudent(student);
     }
