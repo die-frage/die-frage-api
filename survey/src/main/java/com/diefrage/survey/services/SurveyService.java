@@ -2,7 +2,7 @@ package com.diefrage.survey.services;
 
 import com.diefrage.exceptions.TypicalServerException;
 import com.diefrage.survey.entities.Survey;
-import com.diefrage.survey.entities.SurveyRequest;
+import com.diefrage.survey.entities.requests.SurveyRequest;
 import com.diefrage.survey.entities.SurveyStatus;
 import com.diefrage.survey.repositories.StatusRepository;
 import com.diefrage.survey.repositories.SurveyRepository;
