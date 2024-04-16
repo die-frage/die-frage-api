@@ -1,5 +1,6 @@
 package com.diefrage.authserver.services;
 
+
 import com.diefrage.authserver.entities.User;
 import com.diefrage.authserver.repositories.UserRepository;
 import com.diefrage.exceptions.TypicalServerException;
@@ -9,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
-
 
 @Service
 @RequiredArgsConstructor

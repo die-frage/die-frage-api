@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.springframework.test.web.servlet.MockMvc;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class ProfessorApplicationTests {
