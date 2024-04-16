@@ -1,7 +1,7 @@
-package com.diefrage.authserver.config;
+package com.diefrage.authserver.configurations;
 
-import com.diefrage.authserver.service.JwtAuthenticationFilter;
-import com.diefrage.authserver.service.UserService;
+import com.diefrage.authserver.filters.JwtAuthenticationFilter;
+import com.diefrage.authserver.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

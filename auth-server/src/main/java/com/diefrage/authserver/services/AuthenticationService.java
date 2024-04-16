@@ -1,10 +1,10 @@
-package com.diefrage.authserver.service;
+package com.diefrage.authserver.services;
 
-import com.diefrage.authserver.entity.Role;
-import com.diefrage.authserver.entity.User;
-import com.diefrage.authserver.entity.request.SignInRequest;
-import com.diefrage.authserver.entity.request.SignUpRequest;
-import com.diefrage.authserver.entity.response.JwtAuthenticationResponse;
+import com.diefrage.authserver.entities.Role;
+import com.diefrage.authserver.entities.User;
+import com.diefrage.authserver.entities.requests.SignInRequest;
+import com.diefrage.authserver.entities.requests.SignUpRequest;
+import com.diefrage.authserver.entities.responses.JwtAuthenticationResponse;
 import com.diefrage.exceptions.TypicalServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

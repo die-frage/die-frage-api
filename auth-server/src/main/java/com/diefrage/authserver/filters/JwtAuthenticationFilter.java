@@ -1,5 +1,7 @@
-package com.diefrage.authserver.service;
+package com.diefrage.authserver.filters;
 
+import com.diefrage.authserver.services.JwtService;
+import com.diefrage.authserver.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

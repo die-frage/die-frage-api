@@ -1,6 +1,6 @@
-package com.diefrage.authserver.service;
+package com.diefrage.authserver.services;
 
-import com.diefrage.authserver.entity.User;
+import com.diefrage.authserver.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

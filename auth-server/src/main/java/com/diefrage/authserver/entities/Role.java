@@ -1,4 +1,4 @@
-package com.diefrage.authserver.entity;
+package com.diefrage.authserver.entities;
 
 public enum Role {
     ROLE_USER,

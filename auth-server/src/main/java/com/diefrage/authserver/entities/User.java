@@ -1,4 +1,4 @@
-package com.diefrage.authserver.entity;
+package com.diefrage.authserver.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

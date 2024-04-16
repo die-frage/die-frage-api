@@ -1,7 +1,7 @@
-package com.diefrage.authserver.repository;
+package com.diefrage.authserver.repositories;
 
 
-import com.diefrage.authserver.entity.User;
+import com.diefrage.authserver.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;

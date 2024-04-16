@@ -1,4 +1,4 @@
-package com.diefrage.authserver.entity.request;
+package com.diefrage.authserver.entities.requests;
 
 import lombok.Data;
 

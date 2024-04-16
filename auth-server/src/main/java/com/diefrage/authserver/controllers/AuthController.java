@@ -1,9 +1,9 @@
-package com.diefrage.authserver;
+package com.diefrage.authserver.controllers;
 
-import com.diefrage.authserver.entity.request.SignInRequest;
-import com.diefrage.authserver.entity.request.SignUpRequest;
-import com.diefrage.authserver.entity.response.JwtAuthenticationResponse;
-import com.diefrage.authserver.service.AuthenticationService;
+import com.diefrage.authserver.entities.requests.SignInRequest;
+import com.diefrage.authserver.entities.requests.SignUpRequest;
+import com.diefrage.authserver.entities.responses.JwtAuthenticationResponse;
+import com.diefrage.authserver.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

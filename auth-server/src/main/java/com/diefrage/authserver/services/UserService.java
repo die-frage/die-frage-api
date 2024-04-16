@@ -1,7 +1,7 @@
-package com.diefrage.authserver.service;
+package com.diefrage.authserver.services;
 
-import com.diefrage.authserver.entity.User;
-import com.diefrage.authserver.repository.UserRepository;
+import com.diefrage.authserver.entities.User;
+import com.diefrage.authserver.repositories.UserRepository;
 import com.diefrage.exceptions.TypicalServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,4 +1,4 @@
-package com.diefrage.authserver.entity.response;
+package com.diefrage.authserver.entities.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
