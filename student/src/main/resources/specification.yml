@@ -4,7 +4,6 @@ info:
   description: urls for students
   version: 1.0.0
 servers:
-  - url: 'http://localhost:8020'
   - url: 'http://localhost:8787'
 
 components:
@@ -16,7 +15,6 @@ components:
   schemas:
     StudentSignUpRequest:
       type: object
-      $ref: '#/components/schemas/StudentSignUpRequest'
       properties:
         email:
           type: string
@@ -30,7 +28,6 @@ components:
 
     StudentDTO:
       type: object
-      $ref: '#/components/schemas/StudentDTO'
       properties:
         studentId:
           type: integer
