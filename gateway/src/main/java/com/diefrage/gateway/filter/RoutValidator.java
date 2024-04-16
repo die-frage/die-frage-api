@@ -10,11 +10,9 @@ import java.util.function.Predicate;
 public class RoutValidator {
 
     public static final List<String> publicEndpoints = List.of(
-            "/auth/sign-up",
-            "/auth/sign-in",
-            "/auth/validate",
+            "/auth",
             "/api/student",
-            "/api/answer/",
+            "/api/answer",
             "eureka"
     );
 
