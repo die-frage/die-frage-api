@@ -21,11 +21,11 @@ class ProfessorApplicationTests {
     @Autowired
     private MockMvc mockMvc;
 
-    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwiaWQiOjEsImVtYWlsIjoic3RyaW5nQHN0cmluZy5ydSIsInN1YiI6InN0cmluZ0BzdHJpbmcucnUiLCJpYXQiOjE3MTMxNjk2ODksImV4cCI6MTcxMzMxMzY4OX0.FxXWXYZZPR3pGfZC36VBhgOdWHbEbvYEmxn3K_WbOqA";
+    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwiaWQiOjEsImVtYWlsIjoidGVzdEB0ZXN0LnJ1Iiwic3ViIjoidGVzdEB0ZXN0LnJ1IiwiaWF0IjoxNzEzMjQ5NDU1LCJleHAiOjE3MTMzOTM0NTV9.A20eDnRgUxwFj2okngrb8GdP6C6qwnfNCw3g5481SiE";
 
     @Test
     public void testGetProfessorById_WithSameUser() throws Exception {
-        mockMvc.perform(get("/api/professor/1").header("X-Username", "string@string.ru")
+        mockMvc.perform(get("/api/professor/1").header("X-Username", "test@test.ru")
                         .header("Authorization", "Bearer " + this.token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1)); // Assuming the returned JSON contains the user's id
@@ -33,7 +33,7 @@ class ProfessorApplicationTests {
 
     @Test
     public void testGetProfessorById_WithDifferentUser() throws Exception {
-        mockMvc.perform(get("/api/professor/13").header("X-Username", "string@string.ru")
+        mockMvc.perform(get("/api/professor/13").header("X-Username", "test@test.ru")
                         .header("Authorization", "Bearer " + this.token))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("USER_NOT_FOUND"));
@@ -41,7 +41,7 @@ class ProfessorApplicationTests {
 
     @Test
     public void testGetProfessorById_WithNonExistingUser() throws Exception {
-        mockMvc.perform(get("/api/professor/2").header("X-Username", "string@string.ru")
+        mockMvc.perform(get("/api/professor/2").header("X-Username", "test@test.ru")
                         .header("Authorization", "Bearer " + this.token))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("USER_NOT_FOUND"));
@@ -49,15 +49,15 @@ class ProfessorApplicationTests {
 
     @Test
     public void testGetProfessorByEmail_WithSameUser() throws Exception {
-        mockMvc.perform(get("/api/professor/by_email/string@string.ru").header("X-Username", "string@string.ru")
+        mockMvc.perform(get("/api/professor/by_email/test@test.ru").header("X-Username", "test@test.ru")
                         .header("Authorization", "Bearer " + this.token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1)); // Assuming the returned JSON contains the user's id
+                .andExpect(jsonPath("$.id").value(1));
     }
 
     @Test
     public void testGetProfessorByEmail_WithDifferentUser() throws Exception {
-        mockMvc.perform(get("/api/professor/by_email/testuser1713120723559@mail.ru").header("X-Username", "string@string.ru")
+        mockMvc.perform(get("/api/professor/by_email/test@test2.ru").header("X-Username", "test@test.ru")
                         .header("Authorization", "Bearer " + this.token))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("USER_NOT_FOUND"));
@@ -65,7 +65,7 @@ class ProfessorApplicationTests {
 
     @Test
     public void testGetProfessorByEmail_WithNonExistingUser() throws Exception {
-        mockMvc.perform(get("/api/professor/by_email/string2@string.ru").header("X-Username", "string@string.ru")
+        mockMvc.perform(get("/api/professor/by_email/test@test2.ru").header("X-Username", "test@test.ru")
                         .header("Authorization", "Bearer " + this.token))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("USER_NOT_FOUND"));
@@ -74,16 +74,15 @@ class ProfessorApplicationTests {
     @Test
     public void testUpdateCredentials_200() throws Exception {
         Long userId = 1L;
-
         mockMvc.perform(put("/api/professor/credentials/{id}", userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("email", "string@string.ru")
+                        .param("email", "test@test.ru")
                         .param("password", "123456789")
                         .param("firstName", "string")
                         .param("lastName", "string")
                         .param("patronymic", "string")
                         .header("Authorization", "Bearer " + this.token)
-                        .header("X-Username", "string@string.ru"))
+                        .header("X-Username", "test@test.ru"))
                 .andExpect(status().isOk());
     }
 
@@ -93,13 +92,13 @@ class ProfessorApplicationTests {
 
         mockMvc.perform(put("/api/professor/credentials/{id}", userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("email", "testuser1713120723559@mail.ru")
+                        .param("email", "test@test2.ru")
                         .param("password", "123456789")
                         .param("firstName", "string")
                         .param("lastName", "string")
                         .param("patronymic", "string")
                         .header("Authorization", "Bearer " + this.token)
-                        .header("X-Username", "string@string.ru"))
+                        .header("X-Username", "test@test.ru"))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value("USER_ALREADY_EXISTS"));
     }
@@ -110,13 +109,13 @@ class ProfessorApplicationTests {
 
         mockMvc.perform(put("/api/professor/credentials/{id}", userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("email", "stringru")
+                        .param("email", "test")
                         .param("password", "123456789")
                         .param("firstName", "string")
                         .param("lastName", "string")
                         .param("patronymic", "string")
                         .header("Authorization", "Bearer " + this.token)
-                        .header("X-Username", "string@string.ru"))
+                        .header("X-Username", "test@test.ru"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_EMAIL_FORMAT"));
     }
@@ -127,13 +126,13 @@ class ProfessorApplicationTests {
 
         mockMvc.perform(put("/api/professor/credentials/{id}", userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("email", "string@string.ru")
+                        .param("email", "test@test.ru")
                         .param("password", "1234")
                         .param("firstName", "string")
                         .param("lastName", "string")
                         .param("patronymic", "string")
                         .header("Authorization", "Bearer " + this.token)
-                        .header("X-Username", "string@string.ru"))
+                        .header("X-Username", "test@test.ru"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_PASSWORD_FORMAT"));
     }
@@ -144,13 +143,13 @@ class ProfessorApplicationTests {
 
         mockMvc.perform(put("/api/professor/credentials/{id}", userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("email", "string@string.ru")
+                        .param("email", "test@test.ru")
                         .param("password", "123456789")
                         .param("firstName", "123456789")
                         .param("lastName", "string")
                         .param("patronymic", "string")
                         .header("Authorization", "Bearer " + this.token)
-                        .header("X-Username", "string@string.ru"))
+                        .header("X-Username", "test@test.ru"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_NAME_FORMAT"));
     }
@@ -161,13 +160,13 @@ class ProfessorApplicationTests {
 
         mockMvc.perform(put("/api/professor/credentials/{id}", userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("email", "string@string.ru")
+                        .param("email", "test@test.ru")
                         .param("password", "123456789")
                         .param("firstName", "string")
                         .param("lastName", "123456789")
                         .param("patronymic", "string")
                         .header("Authorization", "Bearer " + this.token)
-                        .header("X-Username", "string@string.ru"))
+                        .header("X-Username", "test@test.ru"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_NAME_FORMAT"));
     }
@@ -178,13 +177,13 @@ class ProfessorApplicationTests {
 
         mockMvc.perform(put("/api/professor/credentials/{id}", userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("email", "string@string.ru")
+                        .param("email", "test@test.ru")
                         .param("password", "123456789")
                         .param("firstName", "string")
                         .param("lastName", "string")
                         .param("patronymic", "123456789")
                         .header("Authorization", "Bearer " + this.token)
-                        .header("X-Username", "string@string.ru"))
+                        .header("X-Username", "test@test.ru"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_NAME_FORMAT"));
     }
