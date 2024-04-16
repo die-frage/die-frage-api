@@ -1,13 +1,13 @@
-package com.diefrage.student;
+package com.diefrage.student.controllers;
 
+import com.diefrage.student.services.StudentService;
 import com.diefrage.student.entities.Student;
 import com.diefrage.student.entities.StudentDTO;
-import com.diefrage.student.entities.StudentSignUpRequest;
+import com.diefrage.student.entities.requests.StudentRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.http.HttpHeaders;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -37,7 +37,7 @@ public class StudentController {
     @PostMapping("/registration")
     @Operation(summary = "Создание новой записи о студенте")
     public StudentDTO registration(
-            @RequestBody StudentSignUpRequest request) {
+            @RequestBody StudentRequest request) {
         return StudentDTO.fromStudent(studentService.register(request));
     }
 

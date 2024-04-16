@@ -1,8 +1,8 @@
-package com.diefrage.student;
+package com.diefrage.student.services;
 
 import com.diefrage.exceptions.TypicalServerException;
 import com.diefrage.student.entities.Student;
-import com.diefrage.student.entities.StudentSignUpRequest;
+import com.diefrage.student.entities.requests.StudentRequest;
 import com.diefrage.student.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class StudentService {
         return item.get();
     }
 
-    public Student register(StudentSignUpRequest request) {
+    public Student register(StudentRequest request) {
         if (!isValidEmail(request.getEmail())) {
             TypicalServerException.INVALID_EMAIL_FORMAT.throwException();
         }
