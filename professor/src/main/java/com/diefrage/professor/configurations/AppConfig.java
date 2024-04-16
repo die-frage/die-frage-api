@@ -1,4 +1,4 @@
-package com.diefrage.professor.config;
+package com.diefrage.professor.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.diefrage.professor.config;
+package com.diefrage.professor.configurations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
