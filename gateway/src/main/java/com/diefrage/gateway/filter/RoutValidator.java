@@ -14,6 +14,7 @@ public class RoutValidator {
             "/auth/sign-in",
             "/auth/validate",
             "/api/student",
+            "/api/answer/",
             "eureka"
     );
 
