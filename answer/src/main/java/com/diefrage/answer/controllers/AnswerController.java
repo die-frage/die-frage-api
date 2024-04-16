@@ -5,18 +5,10 @@ import com.diefrage.answer.entities.dto.AnonymousAnswerDTO;
 import com.diefrage.answer.entities.dto.AnswerDTO;
 import com.diefrage.answer.entities.dto.JSONAnswer;
 import com.diefrage.answer.services.AnswerService;
-import com.diefrage.exceptions.TypicalServerException;
-import com.diefrage.professor.entities.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/answer")
@@ -24,18 +16,6 @@ import java.util.List;
 public class AnswerController {
     @Autowired
     private AnswerService answerService;
-
-    @GetMapping("/{survey_id}/all")
-    @Operation(summary = "Получение всех ответов на опрос профессором")
-    public List<AnswerDTO> getAllAnswersBySurvey(
-            @PathVariable(value = "survey_id") Long surveyId,
-            @RequestParam(value = "professor_id") Long professorId,
-            @RequestHeader(value = "X-Username") String username) {
-        return answerService.getAnswersBySurveyId(surveyId, professorId, username)
-                .stream()
-                .map(AnswerDTO::fromAnswer)
-                .toList();
-    }
 
     @GetMapping("/{survey_id}/student/{student_id}")
     @Operation(summary = "Получение ответа на опрос студентом")
@@ -55,6 +35,7 @@ public class AnswerController {
     }
 
     @PostMapping("/authorised")
+    @Operation(summary = "Добавление ответа на опрос студентом")
     public AnswerDTO addAnswerOnSurveyByStudent(
             @RequestParam(value = "survey_id") Long surveyId,
             @RequestParam(value = "student_id") Long studentId,
@@ -63,6 +44,7 @@ public class AnswerController {
     }
 
     @PostMapping("/anonymous")
+    @Operation(summary = "Добавление ответа на опрос анонимом")
     public AnonymousAnswerDTO addAnswerOnSurveyByAnonymous(
             @RequestParam(value = "survey_id") Long surveyId,
             @RequestParam(value = "response") String response) {
@@ -70,6 +52,7 @@ public class AnswerController {
     }
 
     @PutMapping("/update/{survey_id}/student/{student_id}/question/{question_id}")
+    @Operation(summary = "Изменение ответа на вопрос студентом")
     public AnswerDTO changeAnswerOnQuestion(
             @PathVariable(value = "survey_id") Long surveyId,
             @PathVariable(value = "student_id") Long studentId,
@@ -79,6 +62,7 @@ public class AnswerController {
     }
 
     @DeleteMapping("/delete/{survey_id}/student/{student_id}")
+    @Operation(summary = "Удаление ответа на опрос студентом")
     public AnswerDTO deleteAnswer(
             @PathVariable(value = "survey_id") Long surveyId,
             @PathVariable(value = "student_id") Long studentId) {
