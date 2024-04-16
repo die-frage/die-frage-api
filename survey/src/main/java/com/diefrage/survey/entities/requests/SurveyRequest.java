@@ -1,5 +1,6 @@
-package com.diefrage.survey.entities;
+package com.diefrage.survey.entities.requests;
 
+import com.diefrage.survey.entities.requests.JSONQuestion;
 import lombok.Data;
 
 import java.util.Date;

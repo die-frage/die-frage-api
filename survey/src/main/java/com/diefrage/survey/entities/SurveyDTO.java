@@ -1,5 +1,6 @@
 package com.diefrage.survey.entities;
 
+import com.diefrage.survey.entities.requests.JSONQuestion;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;

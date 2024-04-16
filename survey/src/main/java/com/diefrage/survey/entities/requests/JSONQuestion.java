@@ -1,4 +1,4 @@
-package com.diefrage.survey.entities;
+package com.diefrage.survey.entities.requests;
 
 import lombok.*;
 

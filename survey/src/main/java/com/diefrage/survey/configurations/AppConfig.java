@@ -1,4 +1,4 @@
-package com.diefrage.survey.config;
+package com.diefrage.survey.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

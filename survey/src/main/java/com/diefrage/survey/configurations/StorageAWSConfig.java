@@ -1,4 +1,4 @@
-package com.diefrage.survey.config;
+package com.diefrage.survey.configurations;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

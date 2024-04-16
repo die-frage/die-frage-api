@@ -1,5 +1,6 @@
 package com.diefrage.survey.entities;
 
+import com.diefrage.survey.entities.requests.JSONQuestion;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
