@@ -4,8 +4,12 @@ import com.diefrage.exceptions.TypicalServerException;
 import com.diefrage.professor.entities.User;
 import com.diefrage.professor.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -17,9 +21,9 @@ import java.util.regex.Pattern;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-//    private final SurveyRepository surveyRepository;
-//    private final StorageService storageService;
 
+    @Autowired
+    private RestTemplate restTemplate;
 
     public User getUserById(User userRequest, Long id) {
         if (!Objects.equals(userRequest.getId(), id)){
@@ -38,7 +42,6 @@ public class UserService {
         }
         return getUserByEmail(email);
     }
-
 
     public User getUserByEmail(String email) {
         Optional<User> item = userRepository.findByEmail(email);
@@ -61,15 +64,19 @@ public class UserService {
         if (!isValidEmail(email)) {
             TypicalServerException.INVALID_EMAIL_FORMAT.throwException();
         }
+
         if (!isValidPassword(password)) {
             TypicalServerException.INVALID_PASSWORD_FORMAT.throwException();
         }
+
         if (!isValidName(firstName)) {
             TypicalServerException.INVALID_NAME_FORMAT.throwException();
         }
+
         if (!isValidName(lastName)) {
             TypicalServerException.INVALID_NAME_FORMAT.throwException();
         }
+
         if (patronymic == null || patronymic.equals("")) {
         } else if (!isValidName(patronymic)) {
             TypicalServerException.INVALID_NAME_FORMAT.throwException();
@@ -97,13 +104,7 @@ public class UserService {
             TypicalServerException.USER_NOT_FOUND.throwException();
         }
         User user = item.get();
-//        List<String> surveysImages = surveyRepository.findAllByProfessorId(id)
-//                .stream()
-//                .map(Survey::getQrCode)
-//                .collect(Collectors.toList());
-//
-//        for (String s : surveysImages) storageService.deleteImage(s);
-
+        deleteSurveys(user.getId(), user.getEmail());
         userRepository.deleteById(id);
         return user;
     }
@@ -134,5 +135,28 @@ public class UserService {
         Pattern pattern = Pattern.compile(nameRegex);
         Matcher matcher = pattern.matcher(name);
         return matcher.matches();
+    }
+
+    private HttpHeaders createHeadersWithUsername(String username) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Username", username);
+        return headers;
+    }
+
+    private boolean deleteSurveys(Long professorId, String username) {
+        try {
+            String professorServiceUrl = "http://localhost:8040";
+            ResponseEntity<Void> professorResponse = restTemplate.exchange(
+                    professorServiceUrl + "/api/survey/" + professorId + "/" + "delete/all",
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(createHeadersWithUsername(username)),
+                    Void.class);
+            if (professorResponse.getStatusCode() == HttpStatus.OK)
+                return true;
+        } catch (HttpClientErrorException e) {
+            System.out.println(e);
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+        return false;
     }
 }
