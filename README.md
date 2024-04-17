@@ -107,9 +107,9 @@ Swagger используется для документирования API и 
 <img src="images/api.png" width="700" alt="Auth api"/>
 
 ## 6. Используемые технологии
-Проект "Die Frage" разработан с использованием следующих технологий:
-<img src="https://github.com/tomchen/stack-icons/blob/master/logos/spring.svg" alt="Spring" width="120"/>  
-<img src="https://github.com/tomchen/stack-icons/blob/master/logos/java.svg" alt="Java" width="120"/>  
-<img src="https://github.com/tomchen/stack-icons/blob/master/logos/postgresql-3.svg" alt="PostgreSQL" width="120"/>   
-<img src="https://github.com/tomchen/stack-icons/blob/master/logos/swagger-5.svg" alt="Swagger" width="120"/>  
+Проект "Die Frage" разработан с использованием следующих технологий:  
+<img src="https://github.com/tomchen/stack-icons/blob/master/logos/spring.svg" alt="Spring" width="50"/>
+<img src="https://github.com/tomchen/stack-icons/blob/master/logos/java.svg" alt="Java" width="50"/>
+<img src="https://github.com/tomchen/stack-icons/blob/master/logos/postgresql.svg" alt="PostgreSQL" width="50"/>
+<img src="https://github.com/tomchen/stack-icons/blob/master/logos/swagger.svg" alt="Swagger" width="50"/>
 
