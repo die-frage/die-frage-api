@@ -14,7 +14,7 @@
     <name>exceptions</name>
     <description>exceptions</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>11</java.version>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.compiler.source>1.9</maven.compiler.source>
         <maven.compiler.target>1.9</maven.compiler.target>
