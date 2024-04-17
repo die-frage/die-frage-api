@@ -11,6 +11,7 @@ public class RoutValidator {
 
     public static final List<String> publicEndpoints = List.of(
             "/auth",
+            "/code/",
             "/api/student",
             "/api/answer",
             "eureka"

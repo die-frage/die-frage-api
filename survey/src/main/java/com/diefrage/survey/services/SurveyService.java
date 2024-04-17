@@ -48,6 +48,15 @@ public class SurveyService {
     }
 
     @Transactional
+    public Survey getSurveyByCode(String codeId) {
+        Optional<Survey> surveyOptional = surveyRepository.findByCode(codeId);
+        if (surveyOptional.isEmpty()) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+        return surveyOptional.get();
+    }
+
+    @Transactional
     public List<Survey> getAllSurveysByProfessorIdAndName(Long professorId, String surveyName) {
         return surveyRepository.findAllByProfessorId(professorId)
                 .stream()

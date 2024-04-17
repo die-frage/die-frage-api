@@ -37,6 +37,12 @@ public class SurveyController {
         return null;
     }
 
+    @GetMapping("/code/{code}")
+    public SurveyDTO getSurveyByCode(
+            @PathVariable(value = "code") String code) {
+        return SurveyDTO.fromSurvey(surveyService.getSurveyByCode(code));
+    }
+
     @GetMapping("/{professor_id}/all")
     public List<SurveyDTO> getAllSurveysByProfessor(
             @PathVariable(value = "professor_id") Long professorId,
