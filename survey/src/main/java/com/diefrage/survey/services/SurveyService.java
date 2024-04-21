@@ -35,6 +35,15 @@ public class SurveyService {
     }
 
     @Transactional
+    public Survey getSurveyById(Long surveyId) {
+        Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
+        if (surveyOptional.isEmpty()) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+        return surveyOptional.get();
+    }
+
+    @Transactional
     public Survey getSurveyById(Long surveyId, Long professorId) {
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
         if (surveyOptional.isEmpty()) {
@@ -124,6 +133,29 @@ public class SurveyService {
     }
 
     @Transactional
+    public Survey startSurvey(Long surveyId) {
+        Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
+        if (surveyOptional.isEmpty()) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+        Survey survey = surveyOptional.get();
+
+        if (!Objects.equals(survey.getStatus().getStatusId(), CREATED_STATUS)) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+
+        Optional<SurveyStatus> surveyStatus = statusRepository.findById(STARTED_STATUS);
+        if (surveyStatus.isEmpty()) {
+            TypicalServerException.INTERNAL_EXCEPTION.throwException();
+        }
+        SurveyStatus newStatus = surveyStatus.get();
+        survey.setStatus(newStatus);
+        survey.setDateBegin(new Date());
+        surveyRepository.save(survey);
+        return survey;
+    }
+
+    @Transactional
     public Survey startSurvey(Long professorId, Long surveyId) {
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
         if (surveyOptional.isEmpty()) {
@@ -145,6 +177,25 @@ public class SurveyService {
         SurveyStatus newStatus = surveyStatus.get();
         survey.setStatus(newStatus);
         survey.setDateBegin(new Date());
+        surveyRepository.save(survey);
+        return survey;
+    }
+
+    @Transactional
+    public Survey stopSurvey(Long surveyId) {
+        Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
+        if (surveyOptional.isEmpty()) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+        Optional<SurveyStatus> surveyStatus = statusRepository.findById(FINISHED_STATUS);
+        if (surveyStatus.isEmpty()) {
+            TypicalServerException.INTERNAL_EXCEPTION.throwException();
+        }
+
+        Survey survey = surveyOptional.get();
+        SurveyStatus newStatus = surveyStatus.get();
+        survey.setStatus(newStatus);
+        survey.setDateEnd(new Date());
         surveyRepository.save(survey);
         return survey;
     }

@@ -74,8 +74,10 @@ public class AnswerService {
         JSONAnswer jsonAnswer = null;
         try {
             ObjectMapper objectMapper = new ObjectMapper();
+            System.out.println(response);
             jsonAnswer = objectMapper.readValue(response, JSONAnswer.class);
         } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
             TypicalServerException.INTERNAL_EXCEPTION.throwException();
         }
 

@@ -1,8 +1,8 @@
 package com.diefrage.survey.controllers;
 
 import com.diefrage.exceptions.TypicalServerException;
-import com.diefrage.survey.entities.SurveyDTO;
-import com.diefrage.survey.entities.UserDTO;
+import com.diefrage.survey.entities.dto.SurveyDTO;
+import com.diefrage.survey.entities.dto.UserDTO;
 import com.diefrage.survey.entities.requests.SurveyRequest;
 import com.diefrage.survey.services.SurveyService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +35,12 @@ public class SurveyController {
         if (validateUserRequest(professorId, username))
             return SurveyDTO.fromSurvey(surveyService.getSurveyById(surveyId, professorId));
         return null;
+    }
+
+    @GetMapping("/telegram/{survey_id}")
+    public SurveyDTO getSurveyById(
+            @PathVariable(value = "survey_id") Long surveyId) {
+        return SurveyDTO.fromSurvey(surveyService.getSurveyById(surveyId));
     }
 
     @GetMapping("/code/{code}")
@@ -115,15 +121,16 @@ public class SurveyController {
         return null;
     }
 
-    @PutMapping("/{professor_id}/{survey_id}/stop")
+    @PutMapping("/telegram/{survey_id}/start")
+    public SurveyDTO startSurvey(
+            @PathVariable(value = "survey_id") Long surveyId) {
+        return SurveyDTO.fromSurvey(surveyService.startSurvey(surveyId));
+    }
+
+    @PutMapping("/telegram/{survey_id}/stop")
     public SurveyDTO stopSurvey(
-            @PathVariable(value = "professor_id") Long professorId,
-            @PathVariable(value = "survey_id") Long surveyId,
-            @RequestHeader(value = "X-Username") String username) {
-        if (validateUserRequest(professorId, username)) {
-            return SurveyDTO.fromSurvey(surveyService.stopSurvey(professorId, surveyId));
-        }
-        return null;
+            @PathVariable(value = "survey_id") Long surveyId) {
+        return SurveyDTO.fromSurvey(surveyService.stopSurvey(surveyId));
     }
 
     @DeleteMapping("/{professor_id}/{survey_id}/delete")

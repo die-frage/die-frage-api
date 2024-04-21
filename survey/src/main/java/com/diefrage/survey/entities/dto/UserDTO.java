@@ -1,4 +1,4 @@
-package com.diefrage.survey.entities;
+package com.diefrage.survey.entities.dto;
 
 public class UserDTO {
     private Long id;

@@ -1,5 +1,7 @@
-package com.diefrage.survey.entities;
+package com.diefrage.survey.entities.dto;
 
+import com.diefrage.survey.entities.Survey;
+import com.diefrage.survey.entities.SurveyStatus;
 import com.diefrage.survey.entities.requests.JSONQuestion;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

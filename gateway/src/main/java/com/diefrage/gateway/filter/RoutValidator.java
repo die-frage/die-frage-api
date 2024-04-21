@@ -14,6 +14,7 @@ public class RoutValidator {
             "/code/",
             "/api/student",
             "/api/answer",
+            "telegram",
             "eureka"
     );
 
