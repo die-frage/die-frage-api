@@ -1,7 +1,6 @@
 package com.diefrage.answer.controllers;
 
 import com.diefrage.answer.entities.Answer;
-import com.diefrage.answer.entities.dto.AnonymousAnswerDTO;
 import com.diefrage.answer.entities.dto.AnswerDTO;
 import com.diefrage.answer.entities.dto.JSONAnswer;
 import com.diefrage.answer.services.AnswerService;
@@ -41,14 +40,6 @@ public class AnswerController {
             @RequestParam(value = "student_id") Long studentId,
             @RequestParam(value = "response") String response) {
         return AnswerDTO.fromAnswer(answerService.addAnswerAuthorised(surveyId, studentId, response));
-    }
-
-    @PostMapping("/anonymous")
-    @Operation(summary = "Добавление ответа на опрос анонимом")
-    public AnonymousAnswerDTO addAnswerOnSurveyByAnonymous(
-            @RequestParam(value = "survey_id") Long surveyId,
-            @RequestParam(value = "response") String response) {
-        return AnonymousAnswerDTO.fromAnswer(answerService.addAnswerAnonymous(surveyId, response));
     }
 
     @PutMapping("/update/{survey_id}/student/{student_id}/question/{question_id}")
