@@ -101,7 +101,6 @@ class AnswerApplicationTests {
         studentRequest.setGroup_number("A1");
         studentId = studentService.register(studentRequest).getStudentId();
 
-
         String responseJson = "{\"question_id\": 1, \"responses\": [\"London\"], \"points\": 5}";
         answerService.addAnswerAuthorised(surveyId, studentId, responseJson);
     }
