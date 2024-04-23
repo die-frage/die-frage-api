@@ -11,14 +11,10 @@
 
     <modules>
         <module>exceptions</module>
-        <module>answer</module>
         <module>auth-server</module>
         <module>config-server</module>
         <module>discovery</module>
         <module>gateway</module>
-        <module>professor</module>
-        <module>student</module>
-        <module>survey</module>
     </modules>
 
     <build>
