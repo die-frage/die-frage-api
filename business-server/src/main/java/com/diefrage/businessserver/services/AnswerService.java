@@ -3,6 +3,7 @@ package com.diefrage.businessserver.services;
 import com.diefrage.businessserver.entities.Answer;
 import com.diefrage.businessserver.entities.Student;
 import com.diefrage.businessserver.entities.Survey;
+import com.diefrage.businessserver.entities.User;
 import com.diefrage.businessserver.requests.JSONAnswer;
 import com.diefrage.businessserver.repositories.AnswerRepository;
 import com.diefrage.exceptions.TypicalServerException;
@@ -26,7 +27,9 @@ public class AnswerService {
     private final SurveyService surveyService;
 
     @Transactional
-    public List<Answer> getAnswersBySurveyId(Long surveyId, Long professorId, String username) {
+    public List<Answer> getAnswersBySurveyId(User userRequest, Long surveyId, Long professorId, String username) {
+        if (!Objects.equals(userRequest.getId(), professorId))
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
         Survey survey = surveyService.getSurveyById(surveyId, professorId);
         return answerRepository.findAllBySurveyId(surveyId);
     }
