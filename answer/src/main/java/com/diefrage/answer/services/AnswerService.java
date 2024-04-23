@@ -1,11 +1,9 @@
 package com.diefrage.answer.services;
 
-import com.diefrage.answer.entities.AnonymousAnswer;
 import com.diefrage.answer.entities.Answer;
 import com.diefrage.answer.entities.dto.JSONAnswer;
 import com.diefrage.answer.entities.dto.StudentDTO;
 import com.diefrage.answer.entities.dto.SurveyDTO;
-import com.diefrage.answer.repositories.AnonymousAnswerRepository;
 import com.diefrage.answer.repositories.AnswerRepository;
 import com.diefrage.exceptions.TypicalServerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,7 +26,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AnswerService {
     private final AnswerRepository answerRepository;
-    private final AnonymousAnswerRepository anonymousAnswerRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -96,35 +93,6 @@ public class AnswerService {
         }
 
         return answerRepository.save(answer);
-    }
-
-    @Transactional
-    public AnonymousAnswer addAnswerAnonymous(Long surveyId, String response) {
-        Optional<AnonymousAnswer> optionalAnswer = anonymousAnswerRepository.findBySurveyId(surveyId);
-
-        AnonymousAnswer answer;
-        JSONAnswer jsonAnswer = null;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            jsonAnswer = objectMapper.readValue(response, JSONAnswer.class);
-        } catch (JsonProcessingException e) {
-            TypicalServerException.INTERNAL_EXCEPTION.throwException();
-        }
-
-        if (optionalAnswer.isEmpty()) {
-            List<JSONAnswer> jsonAnswerList = new LinkedList<>();
-            jsonAnswerList.add(jsonAnswer);
-            answer = new AnonymousAnswer();
-            answer.setSurveyId(surveyId);
-            answer.setAnswers(jsonAnswerList);
-        } else {
-            answer = optionalAnswer.get();
-            List<JSONAnswer> answers = answer.getAnswers();
-            answers.add(jsonAnswer);
-            answer.setAnswers(answers);
-        }
-
-        return anonymousAnswerRepository.save(answer);
     }
 
     public Answer changeAnswerOnQuestion(Long surveyId, Long studentId, Long questionId, String response) {

@@ -14,14 +14,13 @@ public class Survey {
     private String qr_code;
     private Date date_begin;
     private Date date_end;
-    private Boolean anonymous;
     private List<JSONQuestion> questions;
     private SurveyStatus status;
 
     public Survey() {
     }
 
-    public Survey(Long id, String title, String description, Long professor_id, Integer max_students, String code, String link, String qr_code, Date date_begin, Date date_end, Boolean anonymous, List<JSONQuestion> questions, SurveyStatus status) {
+    public Survey(Long id, String title, String description, Long professor_id, Integer max_students, String code, String link, String qr_code, Date date_begin, Date date_end, List<JSONQuestion> questions, SurveyStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -32,7 +31,6 @@ public class Survey {
         this.qr_code = qr_code;
         this.date_begin = date_begin;
         this.date_end = date_end;
-        this.anonymous = anonymous;
         this.questions = questions;
         this.status = status;
     }
@@ -115,14 +113,6 @@ public class Survey {
 
     public void setDate_end(Date date_end) {
         this.date_end = date_end;
-    }
-
-    public Boolean getAnonymous() {
-        return anonymous;
-    }
-
-    public void setAnonymous(Boolean anonymous) {
-        this.anonymous = anonymous;
     }
 
     public List<JSONQuestion> getQuestions() {

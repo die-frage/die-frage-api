@@ -11,7 +11,6 @@ public class SurveyRequest {
     private String title;
     private String description;
     private Integer max_students;
-    private Boolean anonymous;
     private List<JSONQuestion> questions;
     private Date date_begin;
     private Date date_end;

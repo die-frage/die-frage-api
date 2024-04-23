@@ -51,9 +51,6 @@ public class Survey {
     @Column(name = "code", length = 10)
     private String code;
 
-    @Column(name = "anonymous", nullable = false)
-    private Boolean anonymous;
-
     @Column(name = "link")
     private String link;
 

@@ -19,7 +19,6 @@ public record SurveyDTO(
         @JsonProperty("qr_code") String qrCode,
         @JsonProperty("date_begin") Date dateBegin,
         @JsonProperty("date_end") Date dateEnd,
-        @JsonProperty("anonymous") Boolean anonymous,
         @JsonProperty("questions") List<JSONQuestion> questions,
         @JsonProperty("status") SurveyStatus status) {
 
@@ -35,7 +34,6 @@ public record SurveyDTO(
                 survey.getQrCode(),
                 survey.getDateBegin(),
                 survey.getDateEnd(),
-                survey.getAnonymous(),
                 survey.getQuestions(),
                 survey.getStatus()
         );

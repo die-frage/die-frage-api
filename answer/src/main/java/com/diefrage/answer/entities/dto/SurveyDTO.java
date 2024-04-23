@@ -14,7 +14,6 @@ public class SurveyDTO {
     private String qrCode;
     private Date dateBegin;
     private Date dateEnd;
-    private Boolean anonymous;
     private List<JSONQuestion> questions;
     private SurveyStatus status;
 
@@ -22,7 +21,7 @@ public class SurveyDTO {
     }
 
     public SurveyDTO(Long id, String title, String description, Long professorId, Integer maxStudents, String code,
-                     String link, String qrCode, Date dateBegin, Date dateEnd, Boolean anonymous,
+                     String link, String qrCode, Date dateBegin, Date dateEnd,
                      List<JSONQuestion> questions, SurveyStatus status) {
         this.id = id;
         this.title = title;
@@ -34,7 +33,6 @@ public class SurveyDTO {
         this.qrCode = qrCode;
         this.dateBegin = dateBegin;
         this.dateEnd = dateEnd;
-        this.anonymous = anonymous;
         this.questions = questions;
         this.status = status;
     }
@@ -117,14 +115,6 @@ public class SurveyDTO {
 
     public void setDateEnd(Date dateEnd) {
         this.dateEnd = dateEnd;
-    }
-
-    public Boolean getAnonymous() {
-        return anonymous;
-    }
-
-    public void setAnonymous(Boolean anonymous) {
-        this.anonymous = anonymous;
     }
 
     public List<JSONQuestion> getQuestions() {

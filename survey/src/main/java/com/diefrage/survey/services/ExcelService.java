@@ -31,7 +31,6 @@ public class ExcelService {
     final int ROW_DATE_END = 5;
     final int ROW_TIME_END = 6;
     final int ROW_MAX_NUMBER = 7;
-    final int ROW_ANONYMOUS = 8;
     final int COLUMN_VALUE = 2;
 
     final int COLUMN_NUMBER = 0;
@@ -76,10 +75,6 @@ public class ExcelService {
             int maxStudents = (int) sheetSettings.getRow(ROW_MAX_NUMBER).getCell(COLUMN_VALUE).getNumericCellValue();
             if (maxStudents <= 0) TypicalServerException.INVALID_EXCEL_FORMAT.throwException();
 
-            String anonymousValue = sheetSettings.getRow(ROW_ANONYMOUS).getCell(COLUMN_VALUE).getStringCellValue();
-            if (anonymousValue == null) TypicalServerException.INVALID_EXCEL_FORMAT.throwException();
-            boolean anonymous = anonymousValue.equalsIgnoreCase("да");
-
             List<JSONQuestion> questions = parseQuestions(sheetQuestions);
             if (questions.size() == 0) TypicalServerException.INVALID_EXCEL_FORMAT.throwException();
             try {
@@ -89,7 +84,6 @@ public class ExcelService {
                 survey.setTitle(title);
                 survey.setDescription(description);
                 survey.setMax_students(maxStudents);
-                survey.setAnonymous(anonymous);
                 survey.setQuestions(questions);
                 survey.setDate_begin(dateBegin);
                 survey.setDate_end(dateEnd);

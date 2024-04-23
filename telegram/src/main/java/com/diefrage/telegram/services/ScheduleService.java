@@ -29,14 +29,6 @@ public class ScheduleService {
     private final Long ScheduleRecordStatus_FINISHED = 2L;
 
     @Transactional
-    public ScheduleRecord getScheduleRecordById(Long chatId) {
-        Optional<ScheduleRecord> optionalScheduleRecord = scheduleRepository.findById(chatId);
-        if (optionalScheduleRecord.isEmpty())
-            return null;
-        return optionalScheduleRecord.get();
-    }
-
-    @Transactional
     public ScheduleRecord addScheduleRecord(Long chatId, Long surveyId, Long studentId) {
         if (scheduleRepository.findByChatId(chatId).isPresent())
             TypicalServerException.USER_ALREADY_EXISTS.throwException();
