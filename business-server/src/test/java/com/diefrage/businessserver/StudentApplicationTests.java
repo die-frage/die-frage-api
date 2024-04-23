@@ -1,9 +1,6 @@
 package com.diefrage.businessserver;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,13 +20,14 @@ class StudentApplicationTests {
     @Autowired
     private MockMvc mockMvc;
 
-    private Long studentId = 1L;
-
     @Test
     @Order(1)
     public void testRegistration() throws Exception {
+        Long studentId = 1L;
+        String params = "{ \"email\": \"student@student.com\", \"name\": \"student\", \"group_number\": \"A1\" }";
+
         mockMvc.perform(post("/api/student/registration")
-                        .content("{ \"email\": \"student2@student.com\", \"name\": \"student student\", \"group_number\": \"A1\" }")
+                        .content(params)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.student_id").exists());
@@ -38,6 +36,7 @@ class StudentApplicationTests {
     @Test
     @Order(2)
     public void testGetStudentById() throws Exception {
+        Long studentId = 1L;
         mockMvc.perform(get("/api/student/" + studentId))
                 .andExpect(status().isOk());
     }
@@ -49,10 +48,10 @@ class StudentApplicationTests {
                 .andExpect(status().isOk());
     }
 
-
     @Test
     @Order(4)
     public void testDeleteStudent() throws Exception {
+        Long studentId = 1L;
         mockMvc.perform(delete("/api/student/delete/{student_id}", studentId))
                 .andExpect(status().isOk());
     }
@@ -67,16 +66,16 @@ class StudentApplicationTests {
 
     @Test
     @Order(6)
-    public void testGetStudentByEmail_StudentNotFound() throws Exception {
-        mockMvc.perform(get("/api/student/").param("email", "nonexistent@example.com"))
+    public void testDeleteStudent_StudentNotFound() throws Exception {
+        mockMvc.perform(delete("/api/student/delete/0"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("STUDENT_NOT_FOUND"));
     }
 
     @Test
     @Order(7)
-    public void testDeleteStudent_StudentNotFound() throws Exception {
-        mockMvc.perform(delete("/api/student/delete/0"))
+    public void testGetStudentByEmail_StudentNotFound() throws Exception {
+        mockMvc.perform(get("/api/student/").param("email", "studentnotfound@example.com"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("STUDENT_NOT_FOUND"));
     }
