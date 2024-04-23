@@ -7,7 +7,16 @@
 - Spring Cloud - набор инструментов для построения микросервисных архитектур
 - Микросервисная архитектура используется для улучшения масштабируемости и гибкости приложения
 
-## 2. Структура проекта
+
+## 2. Используемые технологии
+Проект "Die Frage" разработан с использованием следующих технологий:  
+<img src="https://github.com/tomchen/stack-icons/blob/master/logos/spring.svg" alt="Spring" width="50"/>
+<img src="https://github.com/tomchen/stack-icons/blob/master/logos/java.svg" alt="Java" width="50"/>
+<img src="https://github.com/tomchen/stack-icons/blob/master/logos/postgresql.svg" alt="PostgreSQL" width="50"/>
+<img src="https://github.com/tomchen/stack-icons/blob/master/logos/swagger.svg" alt="Swagger" width="50"/>
+
+
+## 3. Структура проекта
 
 Проект состоит из 8 приложений, каждое из которых выполняет определенную функцию:
 
@@ -15,10 +24,8 @@
 2. **discovery** - service discovery (обнаружение сервисов) для микросервисов.  
 3. **gateway** - шлюз API упрощающий связь между клиентом и сервером.  
 4. **auth-server** - для создания и проверки JWT-токенов используется централизованный сервер аутентификации и авторизации.  
-5. **answer** - Представляет собой бизнес приложение для ответов студентов.  
-6. **professor** - Представляет собой бизнес приложение для преподавателя.  
-7. **student** - Представляет собой бизнес приложение для студентов.  
-8. **survey** - Представляет собой бизнес приложение для создания опросов.  
+5. **business-server** - Представляет собой приложение реализующее бизнес логику приложения, crud данных об опросах, пользователях и ответах.  
+6. **telegram-server** - Представляет собой приложение-планировщик, отсылает запросы в телеграмм-бот.  
 
 Модуль **exceptions** - реализован в качестве библиотеки, который подключается через зависимости в остальные модули.
 
@@ -32,22 +39,21 @@
 - 8761: [discovery](http://localhost:8761)
 - 8787: [gateway](http://localhost:8787)
 - 8010: [auth-server](http://localhost:8010)
-- 8020: [student](http://localhost:8020)
-- 8030: [professor](http://localhost:8030)
-- 8040: [survey](http://localhost:8040)
-- 8050: [answer](http://localhost:8050)
+- 8050: [business-server](http://localhost:8050)
+- 8060: [telegram-server](http://localhost:8050)
 
-## 3. База данных
+## 4. База данных
 
 Проект использует PostgreSQL. Подключение осуществляется по адресу `jdbc:postgresql://localhost:5432`.
 
-Названия баз данных, используемых микросервисами:
-- answers
-- students
-- credentials
-- surveys
+Название базы данных: fragedb  
 
-Для корректной работы микросервисов требуется настройка конфигурационных файлов в папке `resources/configurations`. Важно, чтобы название файла совпадало с названием модуля микросервиса. Например, конфигурационный файл для микросервиса student может иметь следующий вид:
+Схема базы данных:  
+
+<img src="images/scheme.png" width="700" alt="База данных"/>
+
+
+Для корректной работы микросервисов требуется настройка конфигурационных файлов в папке `resources/configurations`. Важно, чтобы название файла совпадало с названием модуля микросервиса. Например, конфигурационный файл для микросервиса business-server может иметь следующий вид:
 
 ### student.yml:
 
@@ -60,14 +66,14 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 
 server:
-  port: 8020
+  port: 8050
 spring:
   application:
-    name: student
+    name: business-server
 
 datasource:
   driver-class-name: org.postgresql.Driver
-  url: jdbc:postgresql://localhost:5432/students
+  url: jdbc:postgresql://localhost:5432/fragedb
   username: postgres
   password: postgres
   jpa:
@@ -79,7 +85,7 @@ datasource:
     hibernate:
       dialect: org.hibernate.dialect.PostgreSQLDialect
 ```
-## 4. Запуск проекта 
+## 5. Запуск проекта 
 
 Проект собирается с помощью команды из корневой директории проекта:
 
@@ -93,7 +99,7 @@ java -jar die-frage-api/config-server/target/*.jar
 ```
 
 
-## 5. OPEN API
+## 6. OPEN API
 
 Swagger используется для документирования API и упрощения тестирования запросов. Спецификации для endpoints находятся в следующих директориях:
 
@@ -106,10 +112,10 @@ Swagger используется для документирования API и 
 
 <img src="images/api.png" width="700" alt="Auth api"/>
 
-## 6. Используемые технологии
-Проект "Die Frage" разработан с использованием следующих технологий:  
-<img src="https://github.com/tomchen/stack-icons/blob/master/logos/spring.svg" alt="Spring" width="50"/>
-<img src="https://github.com/tomchen/stack-icons/blob/master/logos/java.svg" alt="Java" width="50"/>
-<img src="https://github.com/tomchen/stack-icons/blob/master/logos/postgresql.svg" alt="PostgreSQL" width="50"/>
-<img src="https://github.com/tomchen/stack-icons/blob/master/logos/swagger.svg" alt="Swagger" width="50"/>
 
+## 7. Тестирование
+
+Интеграционное тестирование проводилось с помощью: **jupiter** - наиболее широко используемая среда тестирования для приложений Java.  
+
+Отчет:  
+<img src="images/report.png" width="700" alt="Отчет"/>
