@@ -180,6 +180,32 @@ public class SurveyService {
     }
 
     @Transactional
+    public Survey stopSurvey(Long professorId, Long surveyId) {
+        Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
+        if (surveyOptional.isEmpty()) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+        Survey survey = surveyOptional.get();
+        if (!Objects.equals(survey.getProfessorId(), professorId)) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+
+        if (!Objects.equals(survey.getStatus().getStatusId(), STARTED_STATUS)) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+
+        Optional<SurveyStatus> surveyStatus = statusRepository.findById(FINISHED_STATUS);
+        if (surveyStatus.isEmpty()) {
+            TypicalServerException.INTERNAL_EXCEPTION.throwException();
+        }
+        SurveyStatus newStatus = surveyStatus.get();
+        survey.setStatus(newStatus);
+        survey.setDateBegin(new Date());
+        surveyRepository.save(survey);
+        return survey;
+    }
+
+    @Transactional
     public Survey stopSurvey(Long surveyId) {
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
         if (surveyOptional.isEmpty()) {

@@ -119,6 +119,17 @@ public class SurveyController {
         return null;
     }
 
+    @PutMapping("/{professor_id}/{survey_id}/stop")
+    public SurveyDTO stopSurvey(
+            @PathVariable(value = "professor_id") Long professorId,
+            @PathVariable(value = "survey_id") Long surveyId,
+            @RequestHeader(value = "X-Username") String username) {
+        if (validateUserRequest(professorId, username)) {
+            return SurveyDTO.fromSurvey(surveyService.stopSurvey(professorId, surveyId));
+        }
+        return null;
+    }
+
     @PutMapping("/telegram/{survey_id}/start")
     public SurveyDTO startSurvey(
             @PathVariable(value = "survey_id") Long surveyId) {
