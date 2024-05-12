@@ -23,7 +23,7 @@ public class ProfessorController {
         return UserDTO.fromUser(userService.getUserById(userRequest, id));
     }
 
-    @GetMapping("by_email/{email}")
+    @GetMapping("/by_email/{email}")
     @Operation(summary = "Получение информацию о пользователе")
     public UserDTO getProfessorByEmail(
             @PathVariable(value = "email") String email,
