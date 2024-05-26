@@ -1,5 +1,6 @@
 package com.diefrage.businessserver.services;
 
+import com.diefrage.businessserver.requests.JSONQuestion;
 import com.diefrage.exceptions.TypicalServerException;
 import com.diefrage.businessserver.entities.Survey;
 import com.diefrage.businessserver.requests.SurveyRequest;
@@ -247,4 +248,26 @@ public class SurveyService {
             surveyRepository.delete(survey);
         }
     }
+
+    @Transactional
+    public JSONQuestion nextQuestion(Long professorId, Long surveyId, Integer questionId) {
+        Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
+        if (surveyOptional.isEmpty()) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+        Survey survey = surveyOptional.get();
+        if (!Objects.equals(survey.getProfessorId(), professorId)) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+
+        if (!Objects.equals(survey.getStatus().getStatusId(), STARTED_STATUS)) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+
+        for (JSONQuestion q : survey.getQuestions()) {
+            if (q.getQuestion_id().equals(questionId)) return q;
+        }
+        return null;
+    }
+
 }

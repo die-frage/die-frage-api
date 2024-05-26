@@ -36,6 +36,9 @@ public class Survey {
     @Column(name = "professor_id", nullable = false)
     private Long professorId;
 
+    @Column(name = "is_interactive", nullable = false)
+    private Boolean isInteractive = false;
+
     @Column(name = "date_begin")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateBegin;

@@ -2,6 +2,7 @@ package com.diefrage.businessserver.controllers;
 
 import com.diefrage.businessserver.dto.SurveyDTO;
 import com.diefrage.businessserver.entities.User;
+import com.diefrage.businessserver.requests.JSONQuestion;
 import com.diefrage.businessserver.requests.SurveyRequest;
 import com.diefrage.businessserver.services.SurveyService;
 import com.diefrage.businessserver.services.UserService;
@@ -158,6 +159,16 @@ public class SurveyController {
             @PathVariable(value = "professor_id") Long professorId,
             @RequestHeader(value = "X-Username") String username) {
         if (validateUserRequest(professorId, username)) surveyService.deleteAllSurveys(professorId);
+    }
+
+    @GetMapping("/next/question/{professor_id}/{survey_id}/{question_id}")
+    public JSONQuestion getNextQuestion(
+            @PathVariable(value = "professor_id") Long professorId,
+            @PathVariable(value = "survey_id") Long surveyId,
+            @PathVariable(value = "question_id") Integer questionId,
+            @RequestHeader(value = "X-Username") String username) {
+        if (!validateUserRequest(professorId, username)) return null;
+        return surveyService.nextQuestion(professorId, surveyId, questionId);
     }
 
     private boolean validateUserRequest(Long professorId, String username) {
