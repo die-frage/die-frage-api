@@ -1,4 +1,4 @@
-package com.diefrage.telegram.entities.dto;
+package com.diefrage.telegram.dto;
 
 import java.util.Date;
 import java.util.List;

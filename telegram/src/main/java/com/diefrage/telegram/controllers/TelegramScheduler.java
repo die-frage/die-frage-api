@@ -2,10 +2,9 @@ package com.diefrage.telegram.controllers;
 
 import com.diefrage.exceptions.TypicalServerException;
 import com.diefrage.telegram.entities.ScheduleRecord;
-import com.diefrage.telegram.entities.dto.Survey;
-import com.diefrage.telegram.entities.dto.SurveyStatus;
+import com.diefrage.telegram.dto.Survey;
+import com.diefrage.telegram.dto.SurveyStatus;
 import com.diefrage.telegram.repositories.ScheduleRepository;
-import com.diefrage.telegram.services.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;

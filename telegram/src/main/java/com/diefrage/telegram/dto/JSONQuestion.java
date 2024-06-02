@@ -1,4 +1,4 @@
-package com.diefrage.telegram.entities.dto;
+package com.diefrage.telegram.dto;
 
 import lombok.*;
 

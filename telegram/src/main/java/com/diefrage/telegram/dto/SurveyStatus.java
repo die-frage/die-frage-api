@@ -1,4 +1,4 @@
-package com.diefrage.telegram.entities.dto;
+package com.diefrage.telegram.dto;
 
 public class SurveyStatus {
     private Long statusId;

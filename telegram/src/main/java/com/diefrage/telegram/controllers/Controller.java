@@ -1,6 +1,6 @@
 package com.diefrage.telegram.controllers;
 
-import com.diefrage.telegram.entities.dto.ScheduleRecordDTO;
+import com.diefrage.telegram.dto.ScheduleRecordDTO;
 import com.diefrage.telegram.services.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

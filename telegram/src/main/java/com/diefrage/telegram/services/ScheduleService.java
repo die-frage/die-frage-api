@@ -2,7 +2,7 @@ package com.diefrage.telegram.services;
 
 import com.diefrage.exceptions.TypicalServerException;
 import com.diefrage.telegram.entities.ScheduleRecord;
-import com.diefrage.telegram.entities.dto.Survey;
+import com.diefrage.telegram.dto.Survey;
 import com.diefrage.telegram.repositories.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

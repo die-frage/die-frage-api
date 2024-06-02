@@ -1,4 +1,4 @@
-package com.diefrage.telegram.entities.dto;
+package com.diefrage.telegram.dto;
 
 import com.diefrage.telegram.entities.ScheduleRecord;
 import com.fasterxml.jackson.annotation.JsonProperty;
