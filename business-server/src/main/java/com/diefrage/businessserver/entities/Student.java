@@ -24,6 +24,9 @@ public class Student {
     @Column(name = "group_number")
     private String groupNumber;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "chat_id", unique = true)
+    private String chatId;
 }

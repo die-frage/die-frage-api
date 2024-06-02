@@ -41,6 +41,7 @@ public class StudentService {
         student.setEmail(request.getEmail());
         student.setName(request.getName());
         student.setGroupNumber(request.getGroup_number());
+        student.setChatId(request.getChat_id());
         studentRepository.save(student);
         return student;
     }

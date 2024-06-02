@@ -51,7 +51,7 @@ public class SurveyService {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
         Survey survey = surveyOptional.get();
-        if (!survey.getProfessorId().equals(professorId)){
+        if (!survey.getProfessorId().equals(professorId)) {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
         return survey;
@@ -243,7 +243,7 @@ public class SurveyService {
     @Transactional
     public void deleteAllSurveys(Long professorId) {
         List<Survey> surveys = getAllSurveysByProfessorId(professorId);
-        for (Survey survey : surveys){
+        for (Survey survey : surveys) {
             storageService.deleteImage(survey.getQrCode());
             surveyRepository.delete(survey);
         }
@@ -269,5 +269,4 @@ public class SurveyService {
         }
         return null;
     }
-
 }

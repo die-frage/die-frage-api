@@ -7,4 +7,5 @@ public class StudentRequest {
     String name;
     String email;
     String group_number;
+    String chat_id;
 }
