@@ -1,6 +1,7 @@
 package com.diefrage.telegram.controllers;
 
 import com.diefrage.exceptions.TypicalServerException;
+import com.diefrage.telegram.dto.JSONQuestion;
 import com.diefrage.telegram.entities.ScheduleRecord;
 import com.diefrage.telegram.dto.Survey;
 import com.diefrage.telegram.dto.SurveyStatus;
@@ -18,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @Component
 public class TelegramScheduler {
@@ -49,13 +52,9 @@ public class TelegramScheduler {
                 .map(ScheduleRecord::getSurveyId)
                 .distinct()
                 .collect(Collectors.toList());
-
         for (Long id : surveysId) {
-            System.out.println(id);
             Survey survey = getSurvey(id);
             if (survey == null) continue;
-            System.out.println(survey);
-
             if (Objects.equals(survey.getStatus().getStatusId(), CREATED_STATUS)) {
                 if (survey.getDate_begin().before(new Date())) {
 
@@ -106,7 +105,7 @@ public class TelegramScheduler {
 
     private Survey getSurvey(Long surveyId) {
         try {
-            String professorServiceUrl = "http://localhost:8040";
+            String professorServiceUrl = "http://localhost:8787";
             ResponseEntity<Survey> surveyDTOResponseEntity = restTemplate.exchange(
                     professorServiceUrl + "/api/survey/telegram/" + surveyId,
                     HttpMethod.GET,
@@ -122,7 +121,7 @@ public class TelegramScheduler {
 
     private void startSurvey(Long surveyId) {
         try {
-            String professorServiceUrl = "http://localhost:8040";
+            String professorServiceUrl = "http://localhost:8787";
             ResponseEntity<Survey> surveyDTOResponseEntity = restTemplate.exchange(
                     professorServiceUrl + "/api/survey/telegram/" + surveyId + "/start",
                     HttpMethod.PUT,
@@ -135,7 +134,7 @@ public class TelegramScheduler {
 
     private void stopSurvey(Long surveyId) {
         try {
-            String professorServiceUrl = "http://localhost:8040";
+            String professorServiceUrl = "http://localhost:8787";
             ResponseEntity<Survey> surveyDTOResponseEntity = restTemplate.exchange(
                     professorServiceUrl + "/api/survey/telegram/" + surveyId + "/stop",
                     HttpMethod.PUT,

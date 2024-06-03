@@ -25,7 +25,6 @@ components:
         name:
           type: string
           required: true
-
     StudentDTO:
       type: object
       properties:

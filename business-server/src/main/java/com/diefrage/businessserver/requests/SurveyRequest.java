@@ -14,4 +14,5 @@ public class SurveyRequest {
     private List<JSONQuestion> questions;
     private Date date_begin;
     private Date date_end;
+    private Boolean is_interactive;
 }

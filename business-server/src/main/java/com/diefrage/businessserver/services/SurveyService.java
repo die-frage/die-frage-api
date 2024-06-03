@@ -7,6 +7,10 @@ import com.diefrage.businessserver.requests.SurveyRequest;
 import com.diefrage.businessserver.entities.SurveyStatus;
 import com.diefrage.businessserver.repositories.StatusRepository;
 import com.diefrage.businessserver.repositories.SurveyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,9 @@ public class SurveyService {
     private final ExcelService excelService;
     private final SurveyRepository surveyRepository;
     private final StatusRepository statusRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     private final Long CREATED_STATUS = 1L;
     private final Long STARTED_STATUS = 2L;
@@ -91,6 +98,7 @@ public class SurveyService {
         newSurvey.setStatus(status);
         newSurvey.setDateBegin(surveyRequest.getDate_begin());
         newSurvey.setDateEnd(surveyRequest.getDate_end());
+        newSurvey.setIsInteractive(surveyRequest.getIs_interactive());
         newSurvey.setQuestions(surveyRequest.getQuestions());
 
         String code = String.valueOf(newSurvey.hashCode());
@@ -127,6 +135,7 @@ public class SurveyService {
         survey.setMaxStudents(surveyRequest.getMax_students());
         survey.setDateBegin(surveyRequest.getDate_begin());
         survey.setDateEnd(surveyRequest.getDate_end());
+        survey.setIsInteractive(surveyRequest.getIs_interactive());
         survey.setQuestions(surveyRequest.getQuestions());
         return surveyRepository.save(survey);
     }
@@ -264,9 +273,30 @@ public class SurveyService {
             TypicalServerException.SURVEY_NOT_FOUND.throwException();
         }
 
+        JSONQuestion foundQuestion = null;
+
         for (JSONQuestion q : survey.getQuestions()) {
-            if (q.getQuestion_id().equals(questionId)) return q;
+            if (q.getQuestion_id().equals(questionId)) {
+                foundQuestion = q;
+                break;
+            }
         }
-        return null;
+
+        System.out.println("[SEND] LOG: S:" + surveyId + "Q: " + questionId);
+        sendNotifications(surveyId, questionId);
+        return foundQuestion;
     }
+
+    private void sendNotifications(Long surveyId, Integer questionId) {
+        try {
+            String url = "http://localhost:8060/api/telegram/next/survey/" + surveyId + "/question/" + questionId;
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+            restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+        } catch (HttpClientErrorException e) {
+            TypicalServerException.SURVEY_NOT_FOUND.throwException();
+        }
+    }
+
 }

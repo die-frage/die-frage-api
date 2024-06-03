@@ -62,4 +62,30 @@ public class StudentService {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
+
+    public Student update(StudentRequest request) {
+        if (!isValidEmail(request.getEmail())) {
+            TypicalServerException.INVALID_EMAIL_FORMAT.throwException();
+        }
+
+        Optional<Student> studentOptional = studentRepository.findByEmail(request.getEmail());
+        if (studentOptional.isEmpty()) TypicalServerException.STUDENT_NOT_FOUND.throwException();
+        Student student = studentOptional.get();
+
+        student.setEmail(request.getEmail());
+        student.setName(request.getName());
+        student.setGroupNumber(request.getGroup_number());
+        student.setChatId(request.getChat_id());
+
+        studentRepository.save(student);
+        return student;
+    }
+
+    public Student getStudentByChatId(String chatId) {
+        Optional<Student> item = studentRepository.findByChatId(chatId);
+        if (item.isEmpty()) {
+            TypicalServerException.STUDENT_NOT_FOUND.throwException();
+        }
+        return item.get();
+    }
 }

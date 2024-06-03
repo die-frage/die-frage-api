@@ -31,6 +31,12 @@ public class StudentController {
         return StudentDTO.fromStudent(studentService.getStudentByEmail(email));
     }
 
+    @GetMapping("/by_chat_id/{chat_id}")
+    @Operation(summary = "Получение информации о студенте")
+    public StudentDTO getStudentByChatId(@PathVariable(value = "chat_id") String chatId) {
+        return StudentDTO.fromStudent(studentService.getStudentByChatId(chatId));
+    }
+
     @PostMapping("/registration")
     @Operation(summary = "Создание новой записи о студенте")
     public StudentDTO registration(@RequestBody StudentRequest request) {
@@ -42,5 +48,11 @@ public class StudentController {
     public StudentDTO deleteStudent(@PathVariable(value = "student_id") Long studentId) {
         Student student = studentService.deleteStudent(studentId);
         return StudentDTO.fromStudent(student);
+    }
+
+    @PutMapping("/update")
+    @Operation(summary = "Изменение данных о студенте")
+    public StudentDTO updateStudent(@RequestBody StudentRequest request) {
+        return StudentDTO.fromStudent(studentService.update(request));
     }
 }

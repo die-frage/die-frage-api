@@ -24,9 +24,6 @@ public class ScheduleRecord {
     @Column(name = "chat_id", nullable = false, unique = true)
     private Long chatId;
 
-    @Column(name = "student_id", nullable = true, unique = true)
-    private Long studentId;
-
     @Column(name = "status", nullable = false)
     private Long status;
 }

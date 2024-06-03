@@ -168,6 +168,7 @@ public class SurveyController {
             @PathVariable(value = "question_id") Integer questionId,
             @RequestHeader(value = "X-Username") String username) {
         if (!validateUserRequest(professorId, username)) return null;
+
         return surveyService.nextQuestion(professorId, surveyId, questionId);
     }
 

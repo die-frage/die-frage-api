@@ -1,0 +1,909 @@
+openapi: 3.0.3
+info:
+  title: Open API die Frage
+  description: urls
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8787'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        firsName:
+          type: string
+        lastName:
+          type: string
+        patronymic:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    StudentSignUpRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        group_number:
+          type: string
+        name:
+          type: string
+    SignInRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    StudentDTO:
+      type: object
+      properties:
+        studentId:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        groupNumber:
+          type: string
+    StatusDTO:
+      type: object
+      properties:
+        status_id:
+          type: integer
+        status_name:
+          type: string
+    QuestionDTO:
+      type: object
+      properties:
+        question_id:
+          type: integer
+        question:
+          type: string
+        type_question:
+          type: string
+        incorrect_answers:
+          type: array
+          items:
+            type: string
+        correct_answers:
+          type: array
+          items:
+            type: string
+        points:
+          type: integer
+        time_limit_sec:
+          type: integer
+    Questions:
+      type: array
+      items:
+        $ref: "#/components/schemas/QuestionDTO"
+    SurveyDTO:
+      type: object
+      properties:
+        survey_id:
+          type: integer
+        title:
+          type: string
+        date_begin:
+          type: string
+        date_end:
+          type: string
+        max_students:
+          type: integer
+        anonymous:
+          type: boolean
+        code:
+          type: string
+        link:
+          type: string
+        qrCode:
+          type: string
+        user:
+          $ref: "#/components/schemas/UserDTO"
+        status:
+          $ref: "#/components/schemas/StatusDTO"
+        questions:
+          $ref: "#/components/schemas/Questions"
+    SurveyRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        max_students:
+          type: integer
+        anonymous:
+          type: boolean
+        questions:
+          $ref: "#/components/schemas/Questions"
+        date_begin:
+          type: string
+        date_end:
+          type: string
+
+paths:
+  /api/professor/{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Professor Controller"
+      summary: get info about one professor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /api/professor/by_email/{email}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Professor Controller"
+      summary: get info about one professor
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /api/professor/credentials/{id}:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Professor Controller"
+      summary: professor update's credentials
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: firstName
+          required: true
+          schema:
+            type: string
+          description: new name
+        - in: query
+          name: lastName
+          required: true
+          schema:
+            type: string
+          description: new surname
+        - in: query
+          name: patronymic
+          required: false
+          schema:
+            type: string
+          description: new second name
+        - in: query
+          name: email
+          required: true
+          schema:
+            type: string
+          description: new email
+        - in: query
+          name: password
+          required: true
+          schema:
+            type: string
+          description: new password
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+        '409':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User already exist
+                  value:
+                    code: USER_ALREADY_EXISTS
+                    status: 409
+                    message: User already exist
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_NAME_FORMAT:
+                  summary: Invalid name format
+                  value:
+                    code: INVALID_NAME_FORMAT
+                    status: 400
+                    message: Invalid name format
+                INVALID_PASSWORD_FORMAT:
+                  summary: Invalid password format
+                  value:
+                    code: INVALID_PASSWORD_FORMAT
+                    status: 400
+                    message: Invalid password format
+                INVALID_EMAIL_FORMAT:
+                  summary: Invalid email format
+                  value:
+                    code: INVALID_EMAIL_FORMAT
+                    status: 400
+                    message: Invalid email format
+  /api/professor/delete/{id}:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Professor Controller"
+      summary: delete professor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /api/student/registration:
+    post:
+      tags:
+        - "Student Controller"
+      summary: registration of student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentSignUpRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_EMAIL_FORMAT:
+                  summary: Invalid email format
+                  value:
+                    code: INVALID_EMAIL_FORMAT
+                    status: 400
+                    message: Invalid email format
+  /api/student/{studentId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Student Controller"
+      summary: get info about one student by id
+      parameters:
+        - in: path
+          name: studentId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                STUDENT_NOT_FOUND:
+                  summary: Student not found
+                  value:
+                    code: STUDENT_NOT_FOUND
+                    status: 404
+                    message: Student not found
+  /api/student/:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Student Controller"
+      summary: get info about student by email
+      parameters:
+        - in: query
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                STUDENT_NOT_FOUND:
+                  summary: Student not found
+                  value:
+                    code: STUDENT_NOT_FOUND
+                    status: 404
+                    message: Student not found
+  /api/student/delete/{studenId}:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Student Controller"
+      summary: student delete all info
+      parameters:
+        - in: path
+          name: studenId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_EMAIL_FORMAT:
+                  summary: Invalid email format
+                  value:
+                    code: INVALID_EMAIL_FORMAT
+                    status: 400
+                    message: Invalid email format
+                STUDENT_NOT_FOUND:
+                  summary: Student not found
+                  value:
+                    code: STUDENT_NOT_FOUND
+                    status: 404
+                    message: Student not found
+  /api/survey/{professor_id}/all:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: get all professor's surveys
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /api/survey/{professor_id}/by_name:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: get all professor's surveys by name
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: survey_name
+          required: true
+          schema:
+            type: string
+          description: survey name search
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+  /api/survey/{professor_id}/add:
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: survey creation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurveyRequest'
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message: Survey not found
+        '500':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INTERNAL_EXCEPTION:
+                  summary: Unlnown Exception
+                  value:
+                    code: INVALID_DATE_BEGIN_FORMAT
+                    status: 500
+                    message: Unlnown Exception
+  /api/survey/{professor_id}/{survey_id}/update:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: survey creation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurveyRequest'
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: survey_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message: Survey not found
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_DATE_BEGIN_FORMAT:
+                  summary: Invalid date begin format
+                  value:
+                    code: INVALID_DATE_BEGIN_FORMAT
+                    status: 400
+                    message: Invalid date begin format
+                INVALID_DATE_END_FORMAT:
+                  summary: Invalid date end format
+                  value:
+                    code: INVALID_DATE_END_FORMAT
+                    status: 400
+                    message: Invalid date end format
+        '500':
+          description: '{"code":"INTERNAL_EXCEPTION","status":500,"message":"USER_NOT_FOUND"}'
+  /api/survey/{professor_id}/{survey_id}/start:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: start survey
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: survey_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message:
+                      Survey not found
+        '500':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INTERNAL_EXCEPTION:
+                  summary: Unlnown Exception
+                  value:
+                    code: INVALID_DATE_BEGIN_FORMAT
+                    status: 500
+                    message: Unlnown Exception
+  /api/survey/{professor_id}/{survey_id}/stop:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: stop survey
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: survey_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message:
+                      Survey not found
+        '500':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INTERNAL_EXCEPTION:
+                  summary: Unlnown Exception
+                  value:
+                    code: INVALID_DATE_BEGIN_FORMAT
+                    status: 500
+                    message: Unlnown Exception
+  /api/survey/{professor_id}/{survey_id}/delete:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Survey Controller"
+      summary: delete survey
+      parameters:
+        - in: path
+          name: professor_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: survey_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyDTO'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+                SURVEY_NOT_FOUND:
+                  summary: Survey not found
+                  value:
+                    code: SURVEY_NOT_FOUND
+                    status: 404
+                    message:
+                      Survey not found
+  /auth/sign-up:
+    post:
+      tags:
+        - "Auth Controller"
+      summary: user registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '409':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_ALREADY_EXISTS:
+                  summary: User already exists
+                  value:
+                    code: USER_ALREADY_EXISTS
+                    status: 409
+                    message: User already exists
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_EMAIL_FORMAT:
+                  summary: Invalid email format
+                  value:
+                    code: INVALID_EMAIL_FORMAT
+                    status: 400
+                    message: Invalid email format
+                INVALID_NAME_FORMAT:
+                  summary: Invalid name format
+                  value:
+                    code: INVALID_NAME_FORMAT
+                    status: 400
+                    message: Invalid name format
+                INVALID_PASSWORD_FORMAT:
+                  summary: Invalid password format
+                  value:
+                    code: INVALID_PASSWORD_FORMAT
+                    status: 400
+                    message: Invalid password format
+  /auth/sign-in:
+    post:
+      tags:
+        - "Auth Controller"
+      summary: user login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                INVALID_EMAIL_FORMAT:
+                  summary: Invalid email format
+                  value:
+                    code: INVALID_EMAIL_FORMAT
+                    status: 400
+                    message: Invalid email format
+                INVALID_PASSWORD_FORMAT:
+                  summary: Invalid password format
+                  value:
+                    code: INVALID_PASSWORD_FORMAT
+                    status: 400
+                    message: Invalid password format
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                USER_NOT_FOUND:
+                  summary: User not found
+                  value:
+                    code: USER_NOT_FOUND
+                    status: 404
+                    message: User not found
+    get:
+      tags:
+        - "Auth Controller"
+      summary: validate token
+      parameters:
+        - in: query
+          name: token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
